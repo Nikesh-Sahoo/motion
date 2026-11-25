@@ -1,0 +1,98 @@
+import React from 'react';
+import Image from 'next/image';
+import { siteConfig } from '@/lib/config';
+
+export function WhyChooseUs() {
+  const metaRows = [
+    { label: 'Location', val: `🇮🇳 ${siteConfig.contact.location}` },
+    { label: 'Tools', val: 'Premiere Pro / After Effects / DaVinci Resolve' },
+    { label: 'Specialty', val: 'Reels · Travel Films · Brand Content' },
+    { label: 'Delivery', val: 'Remote · Fast Turnaround' },
+  ];
+
+  const stats = [
+    { num: '20+', label: 'Projects Edited', color: 'text-[#FF9933]' },
+    { num: '2+', label: 'Years Editing', color: 'text-[#FFFFFF]' },
+    { num: '100%', label: 'Remote-Friendly', color: 'text-[#138808]' },
+  ];
+
+  return (
+    <section id="about" className="py-16 sm:py-24 bg-[#0B0B0D] scroll-mt-24 border-t border-[rgba(243,239,231,0.10)]">
+      <div className="w-[min(74rem,calc(100%-2rem))] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          {/* Portrait Image with photo corners */}
+          <div className="lg:col-span-5">
+            <div className="relative aspect-square w-full max-w-md mx-auto rounded-2xl overflow-hidden border border-[rgba(243,239,231,0.10)] bg-[#15151B]">
+              <Image
+                src="/mayank-about.png"
+                alt="Sayan — video editor and visual storyteller"
+                width={1254}
+                height={1254}
+                className="w-full h-full object-cover object-center"
+                loading="lazy"
+              />
+
+              <div className="absolute top-3.5 left-3.5 w-5 h-5 border-t-2 border-l-2 border-[#F3EFE7] opacity-60" />
+              <div className="absolute top-3.5 right-3.5 w-5 h-5 border-t-2 border-r-2 border-[#F3EFE7] opacity-60" />
+              <div className="absolute bottom-3.5 left-3.5 w-5 h-5 border-b-2 border-l-2 border-[#F3EFE7] opacity-60" />
+              <div className="absolute bottom-3.5 right-3.5 w-5 h-5 border-b-2 border-r-2 border-[#F3EFE7] opacity-60" />
+
+              <span className="absolute bottom-4 left-4 font-mono text-[10px] tracking-wider text-[#F3EFE7] flex items-center gap-1.5 bg-[#0B0B0D]/80 backdrop-blur-sm px-2.5 py-1 rounded-md border border-[rgba(243,239,231,0.15)]">
+                <span className="inline-block w-2 h-2 rounded-full bg-gradient-to-r from-[#FF9933] via-white to-[#138808]" />
+                SAYAN • MOTION 🇮🇳
+              </span>
+            </div>
+          </div>
+
+          {/* Copy and Meta */}
+          <div className="lg:col-span-7 space-y-6">
+            <div>
+              <div className="eyebrow flex items-center gap-2">
+                <span className="inline-block w-2 h-2 rounded-full bg-gradient-to-r from-[#FF9933] via-white to-[#138808]" />
+                <span>ABOUT SAYAN</span>
+                <span>🇮🇳</span>
+              </div>
+              <h2 className="font-display text-4xl sm:text-5xl md:text-6xl text-[#F3EFE7] uppercase leading-[1.02] mb-4">
+                I&apos;M SAYAN.<br />
+                <span className="bg-gradient-to-r from-[#FF9933] via-[#FFFFFF] to-[#138808] bg-clip-text text-transparent">
+                  I MAKE FOOTAGE WORTH FINISHING.
+                </span>
+              </h2>
+              <p className="text-base sm:text-lg text-[#97959F] leading-relaxed max-w-xl">
+                I&apos;m a freelance video editor working with creators and small brands on reels, travel films, and promotional content. I care about pacing, sound, and color as much as the cut itself — the goal is always the same: keep people watching to the end.
+              </p>
+            </div>
+
+            {/* Meta List */}
+            <div className="border-t border-[rgba(243,239,231,0.10)] divide-y divide-[rgba(243,239,231,0.10)] pt-2 text-sm">
+              {metaRows.map((row) => (
+                <div key={row.label} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <span className="font-mono text-xs uppercase tracking-widest text-[#97959F]">
+                    {row.label}
+                  </span>
+                  <span className="text-[#F3EFE7] font-medium text-left sm:text-right">
+                    {row.val}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Stats Row in Indian Flag Tri-Colors */}
+            <div className="pt-4 flex flex-wrap gap-8 sm:gap-12">
+              {stats.map((stat) => (
+                <div key={stat.label}>
+                  <div className={`font-display text-4xl sm:text-5xl ${stat.color || 'text-[#FF9933]'}`}>
+                    {stat.num}
+                  </div>
+                  <div className="font-mono text-xs text-[#97959F] uppercase tracking-wider mt-1">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

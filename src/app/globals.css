@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --void: #0B0B0D;
+  --panel: #15151B;
+  --panel-2: #1B1B22;
+  --bone: #F3EFE7;
+  --ash: #97959F;
+  --orange: #FF9933;
+  --teal: #19C3B8;
+  --saffron: #FF9933;
+  --india-green: #138808;
+  --chakra: #000080;
+  --line: rgba(243, 239, 231, 0.10);
+  --line-strong: rgba(243, 239, 231, 0.20);
+  --display: 'Anton', Impact, sans-serif;
+  --body: 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+  background-color: var(--void);
+}
+
+body {
+  background-color: var(--void);
+  color: var(--bone);
+  font-family: var(--body);
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Eyebrow styling from editshphere.in */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: clamp(0.66rem, 0.25vw + 0.62rem, 0.74rem);
+  letter-spacing: clamp(0.12em, 0.55vw, 0.22em);
+  text-transform: uppercase;
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  flex-wrap: wrap;
+}
+.eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--orange);
+  flex: none;
+}
+
+/* Headings font */
+h1, h2, h3, .font-display {
+  font-family: var(--display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.02;
+}
+
+::selection {
+  background-color: rgba(255, 107, 53, 0.35);
+  color: #FFFFFF;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0B0D;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(243, 239, 231, 0.20);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF9933;
+}
+
+/* Indian National Flag Tri-Color Gradients */
+.gradient-tiranga-text {
+  background: linear-gradient(135deg, #FF9933 0%, #FFFFFF 50%, #138808 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-tiranga-bg {
+  background: linear-gradient(90deg, #FF9933 0%, #FFFFFF 50%, #138808 100%);
+}
