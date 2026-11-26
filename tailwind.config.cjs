@@ -8,30 +8,37 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: '#0B0B0D',
-        void: '#0B0B0D',
-        panel: '#15151B',
-        'panel-2': '#1B1B22',
-        bone: '#F3EFE7',
-        ash: '#97959F',
+        background: '#05050A',
+        'background-alt': '#090A14',
+        void: '#05050A',
+        panel: '#0D0E1A',
+        'panel-2': '#141528',
+        bone: '#F4F6FF',
+        ash: '#8A94B8',
         orange: {
-          DEFAULT: '#FF6B35',
-          glow: 'rgba(255, 107, 53, 0.45)',
-          light: '#FF8859',
+          DEFAULT: '#FF007F',
+          glow: 'rgba(255, 0, 127, 0.45)',
+          light: '#FF4DA6',
         },
         teal: {
-          DEFAULT: '#19C3B8',
-          glow: 'rgba(25, 195, 184, 0.4)',
-          light: '#42E3D8',
+          DEFAULT: '#00F0FF',
+          glow: 'rgba(0, 240, 255, 0.45)',
+          light: '#66F7FF',
         },
-        line: 'rgba(243, 239, 231, 0.10)',
-        'line-strong': 'rgba(243, 239, 231, 0.20)',
-        // Retain compatibility mapping
-        surface: '#15151B',
-        'surface-hover': '#1B1B22',
-        border: 'rgba(243, 239, 231, 0.12)',
-        'accent-purple': '#FF6B35', // mapped to brand orange
-        'accent-cyan': '#19C3B8',   // mapped to brand teal
+        cyber: {
+          cyan: '#00F0FF',
+          pink: '#FF007F',
+          yellow: '#FCEE0A',
+          violet: '#9D4EDD',
+        },
+        line: 'rgba(0, 240, 255, 0.14)',
+        'line-strong': 'rgba(0, 240, 255, 0.30)',
+        surface: '#0D0E1A',
+        'surface-hover': '#141528',
+        border: 'rgba(0, 240, 255, 0.16)',
+        'accent-purple': '#FF007F',
+        'accent-purple-light': '#FF4DA6',
+        'accent-cyan': '#00F0FF',
       },
       fontFamily: {
         display: [
@@ -59,10 +66,13 @@ module.exports = {
         ],
       },
       boxShadow: {
-        'glow-orange': '0 14px 30px -10px rgba(255, 107, 53, 0.55)',
-        'glow-teal': '0 14px 30px -10px rgba(25, 195, 184, 0.45)',
-        card: '0 1px 0 rgba(11,11,13,.08), 0 18px 40px -34px rgba(0,0,0,.45)',
-        'card-hover': '0 20px 45px -35px rgba(255,107,53,.55)',
+        'glow-orange': '0 0 28px -4px rgba(255, 0, 127, 0.65)',
+        'glow-teal': '0 0 28px -4px rgba(0, 240, 255, 0.60)',
+        'glow-cyan': '0 0 28px -4px rgba(0, 240, 255, 0.60)',
+        'cyber-pink': '0 0 24px rgba(255, 0, 127, 0.45)',
+        'cyber-cyan': '0 0 24px rgba(0, 240, 255, 0.45)',
+        card: '0 1px 0 rgba(0,240,255,.12), 0 18px 40px -30px rgba(0,0,0,.7)',
+        'card-hover': '0 20px 45px -25px rgba(0,240,255,.35)',
       },
       animation: {
         marquee: 'marquee 26s linear infinite',

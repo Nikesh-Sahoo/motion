@@ -74,12 +74,11 @@ export async function getCollection<T extends Document = Document>(
 }
 
 /**
- * Executes a MongoDB collection operation safely in both local dev and Cloudflare Workers.
+ * Executes a MongoDB database operation safely in both local dev and Cloudflare Workers.
  * In production/Workers, creates and closes the MongoClient per request to satisfy Worker I/O isolation.
  */
-export async function withCollection<T extends Document = Document, R = unknown>(
-  collectionName: string,
-  operation: (collection: Collection<T>) => Promise<R>,
+export async function withDatabase<R = unknown>(
+  operation: (db: Db) => Promise<R>,
   dbName?: string
 ): Promise<R> {
   if (!isMongoConfigured()) {
@@ -93,14 +92,29 @@ export async function withCollection<T extends Document = Document, R = unknown>
 
   if (process.env.NODE_ENV === 'development') {
     const devClient = await getMongoClient();
-    return operation(devClient.db(targetDb).collection<T>(collectionName));
+    return operation(devClient.db(targetDb));
   }
 
   const reqClient = new MongoClient(uri, options);
   try {
     await reqClient.connect();
-    return await operation(reqClient.db(targetDb).collection<T>(collectionName));
+    return await operation(reqClient.db(targetDb));
   } finally {
     await reqClient.close().catch(() => {});
   }
+}
+
+/**
+ * Executes a MongoDB collection operation safely in both local dev and Cloudflare Workers.
+ * In production/Workers, creates and closes the MongoClient per request to satisfy Worker I/O isolation.
+ */
+export async function withCollection<T extends Document = Document, R = unknown>(
+  collectionName: string,
+  operation: (collection: Collection<T>) => Promise<R>,
+  dbName?: string
+): Promise<R> {
+  return withDatabase(
+    (db) => operation(db.collection<T>(collectionName)),
+    dbName
+  );
 }

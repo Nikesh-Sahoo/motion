@@ -28,16 +28,15 @@ const processSteps = [
 
 export function ProcessSection() {
   return (
-    <section id="process" className="py-16 sm:py-24 bg-[#0B0B0D] scroll-mt-24 border-t border-white/[0.08]">
+    <section id="process" className="py-16 sm:py-24 bg-[#05050A] scroll-mt-24 border-t border-[#00F0FF]/15">
       <div className="w-[min(76rem,calc(100%-2rem))] mx-auto">
         <div className="eyebrow flex items-center gap-2 mb-3">
-          <span className="w-2 h-2 rounded-full bg-[#19C3B8] inline-block animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-[#00F0FF] inline-block animate-pulse shadow-[0_0_8px_#00F0FF]" />
           <span>PRODUCTION PIPELINE</span>
-          <span>🇮🇳</span>
         </div>
-        <h2 className="font-display text-4xl sm:text-5xl md:text-6xl text-[#F3EFE7] uppercase leading-[1.02] mb-12 sm:mb-16">
+        <h2 className="font-display text-4xl sm:text-5xl md:text-6xl text-[#F4F6FF] uppercase leading-[1.02] mb-12 sm:mb-16">
           FROM RAW FOOTAGE<br />
-          <span className="bg-gradient-to-r from-[#FF9933] via-[#FFFFFF] to-[#138808] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#00F0FF] via-[#9D4EDD] to-[#FF007F] bg-clip-text text-transparent">
             TO VIRAL MASTER CUT.
           </span>
         </h2>
@@ -48,30 +47,30 @@ export function ProcessSection() {
               key={step.scene}
               maxTilt={8}
               scale={1.025}
-              glareColor="rgba(25, 195, 184, 0.15)"
+              glareColor="rgba(0, 240, 255, 0.16)"
               className="rounded-2xl h-full"
             >
               <div
-                className="h-full p-6 sm:p-7 rounded-2xl bg-[#14141B]/90 backdrop-blur-xl border border-white/[0.08] hover:border-[#19C3B8]/60 shadow-[0_14px_34px_rgba(0,0,0,0.55)] hover:shadow-[0_22px_48px_rgba(25,195,184,0.18)] flex flex-col justify-between transition-all duration-300 group relative preserve-3d"
+                className="h-full p-6 sm:p-7 rounded-2xl bg-[#0D0E1A]/95 backdrop-blur-xl border border-[#00F0FF]/18 hover:border-[#00F0FF]/65 shadow-[0_14px_34px_rgba(0,0,0,0.6)] hover:shadow-[0_0_30px_rgba(0,240,255,0.18)] flex flex-col justify-between transition-all duration-300 group relative preserve-3d"
               >
                 <div className="preserve-3d">
                   <div className="flex items-center justify-between mb-4 depth-layer-sm">
-                    <span className="font-mono text-xs px-2.5 py-0.5 rounded bg-[#19C3B8]/15 text-[#19C3B8] border border-[#19C3B8]/30 tracking-widest font-semibold">
+                    <span className="font-mono text-xs px-2.5 py-0.5 rounded bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/35 tracking-widest font-semibold">
                       {step.scene}
                     </span>
-                    <span className="font-mono text-xs text-[#97959F]">0{idx + 1}/04</span>
+                    <span className="font-mono text-xs text-[#8A94B8]">0{idx + 1}/04</span>
                   </div>
 
-                  <h3 className="font-display text-2xl text-[#F3EFE7] uppercase mb-2 group-hover:text-white transition-colors depth-layer-md">
+                  <h3 className="font-display text-2xl text-[#F4F6FF] uppercase mb-2 group-hover:text-[#00F0FF] transition-colors depth-layer-md">
                     {step.title}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-[#97959F] leading-relaxed depth-layer-sm">
+                  <p className="text-xs sm:text-sm text-[#8A94B8] leading-relaxed depth-layer-sm">
                     {step.desc}
                   </p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-white/[0.08] font-mono text-[10px] text-[#FF9933] uppercase tracking-wider flex items-center justify-between depth-layer-sm">
+                <div className="mt-6 pt-4 border-t border-white/[0.08] font-mono text-[10px] text-[#FF007F] uppercase tracking-wider flex items-center justify-between depth-layer-sm">
                   <span>STAGE VERIFIED</span>
                   <span>✓</span>
                 </div>

@@ -5,18 +5,19 @@
 @tailwind utilities;
 
 :root {
-  --void: #0B0B0D;
-  --panel: #15151B;
-  --panel-2: #1B1B22;
-  --bone: #F3EFE7;
-  --ash: #97959F;
-  --orange: #FF9933;
-  --teal: #19C3B8;
-  --saffron: #FF9933;
-  --india-green: #138808;
-  --chakra: #000080;
-  --line: rgba(243, 239, 231, 0.10);
-  --line-strong: rgba(243, 239, 231, 0.20);
+  --void: #05050A;
+  --panel: #0D0E1A;
+  --panel-2: #141528;
+  --bone: #F4F6FF;
+  --ash: #8A94B8;
+  --orange: #FF007F;
+  --teal: #00F0FF;
+  --cyber-cyan: #00F0FF;
+  --cyber-pink: #FF007F;
+  --cyber-yellow: #FCEE0A;
+  --cyber-violet: #9D4EDD;
+  --line: rgba(0, 240, 255, 0.14);
+  --line-strong: rgba(0, 240, 255, 0.30);
   --display: 'Anton', Impact, sans-serif;
   --body: 'Inter', sans-serif;
   --mono: 'JetBrains Mono', monospace;
@@ -38,13 +39,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Eyebrow styling from editshphere.in */
+/* Cyberpunk HUD eyebrow */
 .eyebrow {
   font-family: var(--mono);
   font-size: clamp(0.66rem, 0.25vw + 0.62rem, 0.74rem);
-  letter-spacing: clamp(0.12em, 0.55vw, 0.22em);
+  letter-spacing: clamp(0.14em, 0.55vw, 0.24em);
   text-transform: uppercase;
-  color: var(--orange);
+  color: var(--cyber-cyan);
   display: flex;
   align-items: center;
   gap: 0.7em;
@@ -54,8 +55,9 @@ body {
   content: "";
   width: 7px;
   height: 7px;
-  border-radius: 50%;
-  background: var(--orange);
+  border-radius: 2px;
+  background: var(--cyber-pink);
+  box-shadow: 0 0 10px #FF007F;
   flex: none;
 }
 
@@ -64,71 +66,81 @@ h1, h2, h3, .font-display {
   font-family: var(--display);
   font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
   line-height: 1.02;
 }
 
 ::selection {
-  background-color: rgba(255, 107, 53, 0.35);
-  color: #FFFFFF;
+  background-color: rgba(255, 0, 127, 0.38);
+  color: #00F0FF;
 }
 
-/* Custom subtle scrollbar */
+/* Custom subtle cyber scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B0B0D;
+  background: #05050A;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(243, 239, 231, 0.20);
+  background: rgba(0, 240, 255, 0.28);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #FF9933;
+  background: #FF007F;
 }
 
-/* Indian National Flag Tri-Color Gradients */
-.gradient-tiranga-text {
-  background: linear-gradient(135deg, #FF9933 0%, #FFFFFF 50%, #138808 100%);
+/* Cyberpunk Neon Gradients */
+.gradient-cyber-text {
+  background: linear-gradient(120deg, #00F0FF 0%, #9D4EDD 50%, #FF007F 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.gradient-tiranga-bg {
-  background: linear-gradient(90deg, #FF9933 0%, #FFFFFF 50%, #138808 100%);
+.gradient-cyber-bg {
+  background: linear-gradient(90deg, #00F0FF 0%, #9D4EDD 50%, #FF007F 100%);
 }
 
-/* Futuristic Studio Canvas & UI Utilities */
+/* Cyberpunk Grid & Scanlines */
 .bg-grid-pattern {
-  background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 36px 36px;
+  background-image:
+    linear-gradient(to right, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 0, 127, 0.04) 1px, transparent 1px);
 }
 
 .bg-dot-pattern {
   background-size: 24px 24px;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(0, 240, 255, 0.14) 1px, transparent 1px);
+}
+
+.cyber-scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.015) 0px,
+    rgba(255, 255, 255, 0.015) 1px,
+    transparent 1px,
+    transparent 3px
+  );
 }
 
 .studio-panel {
-  background: rgba(21, 21, 27, 0.75);
+  background: rgba(13, 14, 26, 0.82);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(243, 239, 231, 0.08);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 240, 255, 0.18);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
 }
 
 .studio-panel-glow {
-  background: rgba(21, 21, 27, 0.85);
+  background: rgba(13, 14, 26, 0.90);
   backdrop-filter: blur(24px);
-  border: 1px solid rgba(25, 195, 184, 0.25);
-  box-shadow: 0 0 30px rgba(25, 195, 184, 0.12), 0 10px 40px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.16), 0 10px 40px rgba(0, 0, 0, 0.75);
 }
 
 @keyframes eq-bounce-1 {

@@ -28,7 +28,7 @@ export const footerNavigation = {
   ],
   connect: [
     { label: 'Start a Project', href: '/#contact' },
-    { label: 'Email Sayan', href: 'mailto:sayanedits@gmail.com' },
+    { label: 'Email Sayan', href: 'mailto:sayanedits007@gmail.com' },
     { label: 'Call / WhatsApp', href: 'tel:+916370283042' },
     { label: 'Upwork Profile', href: 'https://www.upwork.com/freelancers/~0181b827c60b2472a9?mp_source=share' },
   ],

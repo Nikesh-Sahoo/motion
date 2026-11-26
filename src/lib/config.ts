@@ -11,7 +11,7 @@ export const siteConfig = {
     baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1',
   },
   contact: {
-    email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'sayanedits@gmail.com',
+    email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'sayanedits007@gmail.com',
     phone: process.env.NEXT_PUBLIC_PHONE_NUMBER || '+91 6370283042',
     whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '+916370283042',
     location: process.env.NEXT_PUBLIC_LOCATION || 'Bhubaneswar, India',

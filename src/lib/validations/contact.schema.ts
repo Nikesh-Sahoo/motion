@@ -1,10 +1,17 @@
 import { z } from 'zod';
 
 export const serviceTypeOptions = [
-  'Short-Form Content (Reels / Shorts / TikTok)',
-  'YouTube & Long Form (Vlogs / Finance / Gaming)',
-  'Brand & Promo Edits',
-  'Color Grading & Motion Graphics',
+  'Vlog Edits',
+  'Instagram & TikTok Reel Edit',
+  'YouTube Shorts & Long Video Edit',
+  'Motion Graphics Edit',
+  'App Promotion Editing',
+  'Brand Promotion Edit',
+  'Product Promotion Edit',
+  'Cinematic Video Edit',
+  'Titlecard Video Edit',
+  'Premium Photo Edit',
+  'Self Reference Service (Custom Reference Style)',
   'Other',
 ] as const;
 
@@ -13,18 +20,19 @@ export const platformOptions = [
   'Instagram',
   'TikTok',
   'LinkedIn',
+  'App Store / Play Store',
   'Website / Brand Channel',
   'Multiple Platforms',
   'Other',
 ] as const;
 
 export const budgetRangeOptions = [
-  'Under ₹5,000',
-  '₹5,000–₹15,000',
-  '₹15,000–₹35,000',
-  '₹35,000–₹75,000',
-  'Above ₹75,000',
-  'Flexible / Per-project quote',
+  '₹500',
+  '₹500 – ₹1,500',
+  '₹1,500 – ₹5,000',
+  '₹5,000 – ₹15,000',
+  '₹15,000 – ₹35,000',
+  'Above ₹35,000',
 ] as const;
 
 export const videoDurationOptions = [
@@ -70,7 +78,20 @@ export const contactFormSchema = z.object({
   platform: z.string().min(1, { message: 'Please select a primary platform.' }),
   approximateDuration: z.string().min(1, { message: 'Please select an approximate video duration.' }),
   numberOfVideos: z.string().min(1, { message: 'Please select the number of videos needed.' }),
-  budgetRange: z.string().min(1, { message: 'Please choose an approximate budget range.' }),
+  budgetRange: z
+    .string()
+    .trim()
+    .min(1, { message: 'Please select or enter your budget (starting from ₹500).' })
+    .refine(
+      (val) => {
+        const cleaned = val.replace(/[₹,\s]/g, '');
+        if (/^\d+(\.\d+)?$/.test(cleaned)) {
+          return Number(cleaned) >= 500;
+        }
+        return true;
+      },
+      { message: 'Minimum budget starts from ₹500.' }
+    ),
   deadline: z.string().min(1, { message: 'Please select your target deadline.' }),
   projectDescription: z
     .string()

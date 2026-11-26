@@ -16,17 +16,17 @@ export function Badge({
 }: BadgeProps) {
   const variants = {
     orange:
-      'bg-[#FF6B35]/10 text-[#FF6B35] border border-[#FF6B35]/30',
+      'bg-[#FF007F]/15 text-[#FF4DA6] border border-[#FF007F]/40',
     purple:
-      'bg-[#FF6B35]/10 text-[#FF6B35] border border-[#FF6B35]/30',
+      'bg-[#9D4EDD]/15 text-[#D8B4FE] border border-[#9D4EDD]/40',
     teal:
-      'bg-[#19C3B8]/10 text-[#19C3B8] border border-[#19C3B8]/30',
+      'bg-[#00F0FF]/12 text-[#00F0FF] border border-[#00F0FF]/35',
     cyan:
-      'bg-[#19C3B8]/10 text-[#19C3B8] border border-[#19C3B8]/30',
+      'bg-[#00F0FF]/12 text-[#00F0FF] border border-[#00F0FF]/35',
     neutral:
-      'bg-[#1B1B22] text-[#97959F] border border-[rgba(243,239,231,0.10)]',
+      'bg-[#0D0E1A] text-[#8A94B8] border border-[#00F0FF]/15',
     outline:
-      'bg-transparent text-[#97959F] border border-[rgba(243,239,231,0.15)]',
+      'bg-transparent text-[#8A94B8] border border-[#00F0FF]/25',
   };
 
   const sizes = {

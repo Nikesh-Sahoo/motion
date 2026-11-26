@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
+import { SiteChrome } from '@/components/layout/SiteChrome';
 import { siteConfig } from '@/lib/config';
 
 export const metadata: Metadata = {
@@ -62,12 +61,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="min-h-screen flex flex-col bg-[#0B0B0D] text-[#F3EFE7] selection:bg-[#FF9933] selection:text-[#0B0B0D]">
-        {/* Indian Flag Tri-color Accent Bar */}
-        <div className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#FF9933] via-[#FFFFFF] to-[#138808] z-[60]" />
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+      <body className="min-h-screen flex flex-col bg-[#05050A] text-[#F4F6FF] selection:bg-[#FF007F] selection:text-[#00F0FF] cyber-scanlines">
+        {/* Cyberpunk Neon Accent Bar */}
+        <div className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#00F0FF] via-[#9D4EDD] to-[#FF007F] shadow-[0_0_16px_rgba(0,240,255,0.65)] z-[60]" />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

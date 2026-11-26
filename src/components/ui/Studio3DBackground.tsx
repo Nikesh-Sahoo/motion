@@ -111,7 +111,7 @@ export function Studio3DBackground() {
         speedZ: 0.002,
         driftSpeed: 0.0012,
         phase: 0,
-        color: 'rgba(25, 195, 184, 0.34)',
+        color: 'rgba(0, 240, 255, 0.42)',
         kind: 'cube',
       },
       {
@@ -125,7 +125,7 @@ export function Studio3DBackground() {
         speedZ: 0.004,
         driftSpeed: 0.001,
         phase: 1.8,
-        color: 'rgba(255, 153, 51, 0.34)',
+        color: 'rgba(255, 0, 127, 0.42)',
         kind: 'octahedron',
       },
       {
@@ -139,7 +139,7 @@ export function Studio3DBackground() {
         speedZ: 0.003,
         driftSpeed: 0.0015,
         phase: 3.1,
-        color: 'rgba(25, 195, 184, 0.26)',
+        color: 'rgba(0, 240, 255, 0.30)',
         kind: 'octahedron',
       },
       {
@@ -153,7 +153,7 @@ export function Studio3DBackground() {
         speedZ: -0.003,
         driftSpeed: 0.0013,
         phase: 4.4,
-        color: 'rgba(255, 153, 51, 0.24)',
+        color: 'rgba(252, 238, 10, 0.26)',
         kind: 'cube',
       },
       {
@@ -167,7 +167,7 @@ export function Studio3DBackground() {
         speedZ: 0.002,
         driftSpeed: 0.0011,
         phase: 2.3,
-        color: 'rgba(243, 239, 231, 0.18)',
+        color: 'rgba(157, 78, 221, 0.32)',
         kind: 'octahedron',
       },
     ];
@@ -232,9 +232,9 @@ export function Studio3DBackground() {
         if (!pNear || !pFar) continue;
 
         const grad = ctx.createLinearGradient(pNear.x, pNear.y, pFar.x, pFar.y);
-        grad.addColorStop(0, 'rgba(25, 195, 184, 0.16)');
-        grad.addColorStop(0.55, 'rgba(25, 195, 184, 0.06)');
-        grad.addColorStop(1, 'rgba(25, 195, 184, 0)');
+        grad.addColorStop(0, 'rgba(0, 240, 255, 0.22)');
+        grad.addColorStop(0.55, 'rgba(157, 78, 221, 0.10)');
+        grad.addColorStop(1, 'rgba(0, 240, 255, 0)');
         ctx.strokeStyle = grad;
 
         ctx.beginPath();
@@ -249,8 +249,8 @@ export function Studio3DBackground() {
         const pRight = project({ x: gridMaxX, y: gridY, z: gz });
         if (!pLeft || !pRight) continue;
 
-        const alpha = Math.max(0, (1 - gz / maxZ) * 0.14);
-        ctx.strokeStyle = `rgba(255, 153, 51, ${alpha.toFixed(3)})`;
+        const alpha = Math.max(0, (1 - gz / maxZ) * 0.20);
+        ctx.strokeStyle = `rgba(255, 0, 127, ${alpha.toFixed(3)})`;
         ctx.beginPath();
         ctx.moveTo(pLeft.x, pLeft.y);
         ctx.lineTo(pRight.x, pRight.y);

@@ -11,20 +11,20 @@ export const metadata: Metadata = {
 
 export default function ServicesPage() {
   return (
-    <div className="pt-28 pb-20 bg-[#0B0B0D]">
+    <div className="pt-28 pb-20 bg-[#05050A]">
       <div className="w-[min(74rem,calc(100%-2rem))] mx-auto">
         {/* Page Hero Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="eyebrow justify-center">WHAT CLIENTS BOOK</div>
-          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl text-[#F3EFE7] uppercase leading-[1.02]">
+          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl text-[#F4F6FF] uppercase leading-[1.02]">
             EDITING THAT FITS<br />
-            <span className="bg-gradient-to-r from-[#FF9933] via-[#FFFFFF] to-[#138808] bg-clip-text text-transparent">
-              THE PLATFORM.
+            <span className="bg-gradient-to-r from-[#00F0FF] via-[#9D4EDD] to-[#FF007F] bg-clip-text text-transparent">
+              EVERY FORMAT.
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg text-[#97959F] leading-relaxed">
-            Choose the kind of content you need, send the footage and reference style, and I will shape the edit around your audience, deadline, and brand voice.
+          <p className="text-base sm:text-lg text-[#8A94B8] leading-relaxed">
+            Choose from our full editing &amp; promotion catalog (including Self Reference custom style matching), starting from ₹500.
           </p>
         </div>
 
@@ -36,18 +36,18 @@ export default function ServicesPage() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="mt-20 p-8 sm:p-12 rounded-3xl bg-[#15151B] border border-[rgba(243,239,231,0.10)] text-center max-w-3xl mx-auto">
+        <div className="mt-20 p-8 sm:p-12 rounded-3xl bg-[#0D0E1A] border border-[#00F0FF]/25 text-center max-w-3xl mx-auto shadow-[0_0_35px_rgba(0,240,255,0.08)]">
           <div className="eyebrow justify-center mb-3">READY TO CUT?</div>
-          <h3 className="font-display text-3xl sm:text-4xl text-[#F3EFE7] uppercase mb-4">
+          <h3 className="font-display text-3xl sm:text-4xl text-[#F4F6FF] uppercase mb-4">
             LET&apos;S SHAPE YOUR NEXT VIDEO.
           </h3>
-          <p className="text-sm sm:text-base text-[#97959F] max-w-lg mx-auto mb-8">
-            Send your footage and a quick brief. Turnaround is usually 48–72 hours depending on length and scope.
+          <p className="text-sm sm:text-base text-[#8A94B8] max-w-lg mx-auto mb-8">
+            Send your footage, self-reference style link, and budget starting from ₹500.
           </p>
 
           <a
             href="/#contact"
-            className="inline-flex items-center justify-center px-7 py-3 rounded-full bg-[#FF9933] text-[#0B0B0D] font-bold text-sm hover:shadow-[0_0_25px_rgba(255,153,51,0.6)] transition-all"
+            className="inline-flex items-center justify-center px-7 py-3 rounded-full bg-gradient-to-r from-[#00F0FF] to-[#FF007F] text-[#05050A] font-bold text-sm hover:shadow-[0_0_26px_rgba(0,240,255,0.6)] transition-all"
           >
             Start a Project with Motionxyne
           </a>

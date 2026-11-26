@@ -25,12 +25,12 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       />
 
       {/* Slide-over panel */}
-      <div className="fixed inset-y-0 right-0 w-full max-w-sm bg-[#0B0B0D] border-l border-[rgba(243,239,231,0.10)] p-6 shadow-2xl flex flex-col justify-between overflow-y-auto">
+      <div className="fixed inset-y-0 right-0 w-full max-w-sm bg-[#05050A] border-l border-[#00F0FF]/25 p-6 shadow-2xl flex flex-col justify-between overflow-y-auto">
         <div>
           {/* Header */}
-          <div className="flex items-center justify-between pb-6 border-b border-[rgba(243,239,231,0.10)]">
+          <div className="flex items-center justify-between pb-6 border-b border-[#00F0FF]/15">
             <Link href="/#top" onClick={onClose} className="inline-flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(25,195,184,0.45)] border border-[rgba(243,239,231,0.15)] flex-shrink-0 bg-[#0B0B0D]">
+              <div className="w-10 h-10 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(0,240,255,0.45)] border border-[#00F0FF]/40 flex-shrink-0 bg-[#05050A]">
                 <Image
                   src="/motion-logo.jpg"
                   alt="Motion"
@@ -39,7 +39,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   className="w-full h-full object-cover scale-110"
                 />
               </div>
-              <span className="font-display text-2xl text-[#F3EFE7] uppercase tracking-wider">
+              <span className="font-display text-2xl text-[#F4F6FF] uppercase tracking-wider">
                 MOTIONXYNE
               </span>
             </Link>
@@ -47,7 +47,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             <button
               onClick={onClose}
               aria-label="Close navigation menu"
-              className="p-2 rounded-lg text-[#97959F] hover:text-[#F3EFE7] hover:bg-[#15151B] transition-colors"
+              className="p-2 rounded-lg text-[#8A94B8] hover:text-[#00F0FF] hover:bg-[#0D0E1A] transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
@@ -60,32 +60,32 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 key={item.label}
                 href={item.href}
                 onClick={onClose}
-                className="flex items-center justify-between px-3 py-3 rounded-xl text-lg font-display uppercase tracking-wider text-[#F3EFE7] hover:text-[#FF6B35] hover:bg-[#15151B] transition-colors"
+                className="flex items-center justify-between px-3 py-3 rounded-xl text-lg font-display uppercase tracking-wider text-[#F4F6FF] hover:text-[#00F0FF] hover:bg-[#0D0E1A] transition-colors"
               >
                 <span>{item.label}</span>
-                <ArrowRight className="w-4 h-4 text-[#97959F]" />
+                <ArrowRight className="w-4 h-4 text-[#8A94B8]" />
               </a>
             ))}
 
             <a
               href="/#contact"
               onClick={onClose}
-              className="flex items-center justify-between px-3 py-3 rounded-xl text-lg font-display uppercase tracking-wider text-[#FF6B35] bg-[#15151B] transition-colors mt-4"
+              className="flex items-center justify-between px-3 py-3 rounded-xl text-lg font-display uppercase tracking-wider text-[#FF007F] bg-[#0D0E1A] border border-[#FF007F]/30 transition-colors mt-4"
             >
               <span>Contact</span>
-              <ArrowRight className="w-4 h-4 text-[#FF6B35]" />
+              <ArrowRight className="w-4 h-4 text-[#FF007F]" />
             </a>
           </nav>
         </div>
 
         {/* Footer in mobile drawer */}
-        <div className="pt-6 border-t border-[rgba(243,239,231,0.10)] space-y-3 text-center">
-          <p className="text-xs text-[#97959F]">
-            Motionxyne • 🇮🇳 {siteConfig.contact.location}
+        <div className="pt-6 border-t border-[#00F0FF]/15 space-y-3 text-center">
+          <p className="text-xs text-[#8A94B8]">
+            Motionxyne • {siteConfig.contact.location}
           </p>
           <a
             href={`mailto:${siteConfig.contact.email}`}
-            className="text-xs text-[#19C3B8] font-mono hover:underline block"
+            className="text-xs text-[#00F0FF] font-mono hover:underline block"
           >
             {siteConfig.contact.email}
           </a>

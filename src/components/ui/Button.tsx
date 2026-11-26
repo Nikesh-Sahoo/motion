@@ -30,21 +30,21 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B35] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0B0D] disabled:opacity-50 disabled:pointer-events-none select-none rounded-full active:scale-[0.98]';
+      'inline-flex items-center justify-center font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05050A] disabled:opacity-50 disabled:pointer-events-none select-none rounded-full active:scale-[0.98]';
 
     const variants = {
       primary:
-        'bg-[#FF6B35] text-[#0B0B0D] hover:shadow-glow-orange hover:-translate-y-0.5',
+        'bg-[#FF007F] text-[#F4F6FF] hover:shadow-glow-orange hover:-translate-y-0.5',
       secondary:
-        'bg-[#15151B] text-[#F3EFE7] border border-[rgba(243,239,231,0.15)] hover:border-[#FF6B35] hover:text-[#FF6B35]',
+        'bg-[#0D0E1A] text-[#F4F6FF] border border-[#00F0FF]/30 hover:border-[#00F0FF] hover:text-[#00F0FF]',
       outline:
-        'border border-[rgba(243,239,231,0.20)] bg-transparent text-[#F3EFE7] hover:border-[#FF6B35] hover:text-[#FF6B35]',
+        'border border-[#00F0FF]/30 bg-transparent text-[#F4F6FF] hover:border-[#FF007F] hover:text-[#FF007F]',
       ghost:
-        'bg-transparent text-[#97959F] hover:text-[#F3EFE7]',
+        'bg-transparent text-[#8A94B8] hover:text-[#00F0FF]',
       teal:
-        'bg-[#19C3B8] text-[#0B0B0D] hover:shadow-glow-teal hover:-translate-y-0.5',
+        'bg-[#00F0FF] text-[#05050A] hover:shadow-glow-teal hover:-translate-y-0.5',
       cyan:
-        'bg-[#19C3B8] text-[#0B0B0D] hover:shadow-glow-teal hover:-translate-y-0.5',
+        'bg-[#00F0FF] text-[#05050A] hover:shadow-glow-cyan hover:-translate-y-0.5',
     };
 
     const sizes = {

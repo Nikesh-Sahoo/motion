@@ -23,32 +23,32 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="pt-28 pb-20 bg-[#0B0B0D]">
+    <div className="pt-28 pb-20 bg-[#05050A]">
       <div className="w-[min(74rem,calc(100%-2rem))] mx-auto">
         <div className="max-w-3xl mx-auto">
           {/* Copy and Meta */}
           <div className="space-y-6">
             <div>
               <div className="eyebrow">ABOUT</div>
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-[#F3EFE7] uppercase leading-[1.02] mb-4">
+              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-[#F4F6FF] uppercase leading-[1.02] mb-4">
                 I&apos;M SAYAN.<br />I MAKE FOOTAGE<br />
-                <span className="bg-gradient-to-r from-[#FF9933] via-[#FFFFFF] to-[#138808] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#00F0FF] via-[#9D4EDD] to-[#FF007F] bg-clip-text text-transparent">
                   WORTH FINISHING.
                 </span>
               </h1>
-              <p className="text-base sm:text-lg text-[#97959F] leading-relaxed max-w-xl">
+              <p className="text-base sm:text-lg text-[#8A94B8] leading-relaxed max-w-xl">
                 I&apos;m a freelance video editor working with creators and small brands on reels, travel films, and promotional content. I care about pacing, sound, and color as much as the cut itself — the goal is always the same: keep people watching to the end.
               </p>
             </div>
 
             {/* Meta List */}
-            <div className="border-t border-[rgba(243,239,231,0.10)] divide-y divide-[rgba(243,239,231,0.10)] pt-2 text-sm">
+            <div className="border-t border-[#00F0FF]/15 divide-y divide-white/[0.08] pt-2 text-sm">
               {metaRows.map((row) => (
                 <div key={row.label} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                  <span className="font-mono text-xs uppercase tracking-widest text-[#97959F]">
+                  <span className="font-mono text-xs uppercase tracking-widest text-[#8A94B8]">
                     {row.label}
                   </span>
-                  <span className="text-[#F3EFE7] font-medium text-left sm:text-right">
+                  <span className="text-[#F4F6FF] font-medium text-left sm:text-right">
                     {row.val}
                   </span>
                 </div>
@@ -59,10 +59,10 @@ export default function AboutPage() {
             <div className="pt-4 flex flex-wrap gap-8 sm:gap-12">
               {stats.map((stat) => (
                 <div key={stat.label}>
-                  <div className="font-display text-4xl sm:text-5xl text-[#FF6B35]">
+                  <div className="font-display text-4xl sm:text-5xl text-[#00F0FF]">
                     {stat.num}
                   </div>
-                  <div className="font-mono text-xs text-[#97959F] uppercase tracking-wider mt-1">
+                  <div className="font-mono text-xs text-[#8A94B8] uppercase tracking-wider mt-1">
                     {stat.label}
                   </div>
                 </div>
@@ -72,7 +72,7 @@ export default function AboutPage() {
             <div className="pt-4">
               <a
                 href="/#contact"
-                className="inline-flex items-center justify-center px-7 py-3 rounded-full bg-[#FF6B35] text-[#0B0B0D] font-semibold text-sm hover:shadow-glow-orange transition-all"
+                className="inline-flex items-center justify-center px-7 py-3 rounded-full bg-gradient-to-r from-[#00F0FF] to-[#FF007F] text-[#05050A] font-bold text-sm hover:shadow-[0_0_24px_rgba(0,240,255,0.55)] transition-all"
               >
                 Work With Sayan
               </a>

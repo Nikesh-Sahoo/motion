@@ -219,43 +219,43 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
 
   if (submitSuccess && submittedData) {
     return (
-      <div className="rounded-2xl bg-[#15151B] border border-[#FF6B35]/40 p-6 sm:p-8 shadow-2xl space-y-6">
-        <div className="w-12 h-12 rounded-xl bg-[#19C3B8]/10 border border-[#19C3B8]/30 text-[#19C3B8] flex items-center justify-center mx-auto">
+      <div className="rounded-2xl bg-[#0D0E1A] border border-[#00F0FF]/45 p-6 sm:p-8 shadow-[0_0_40px_rgba(0,240,255,0.15)] space-y-6">
+        <div className="w-12 h-12 rounded-xl bg-[#00F0FF]/15 border border-[#00F0FF]/40 text-[#00F0FF] flex items-center justify-center mx-auto">
           <CheckCircle2 className="w-6 h-6" />
         </div>
 
         <div className="text-center space-y-2 max-w-lg mx-auto">
-          <h3 className="font-display text-2xl text-[#F3EFE7] uppercase">
-            Inquiry Saved & Brief Ready!
+          <h3 className="font-display text-2xl text-[#F4F6FF] uppercase">
+            Inquiry Saved &amp; Brief Ready!
           </h3>
-          <p className="text-xs sm:text-sm text-[#97959F] leading-relaxed">
-            Thank you, <span className="text-[#FF9933] font-semibold">{submittedData.fullName}</span>. Your project brief has been recorded in our database. Sayan will review your requirements and respond within 24–48 hours. You may also send an email copy directly below.
+          <p className="text-xs sm:text-sm text-[#8A94B8] leading-relaxed">
+            Thank you, <span className="text-[#FF007F] font-semibold">{submittedData.fullName}</span>. Your project brief has been recorded in our database. Sayan will review your requirements and respond within 24–48 hours. You may also send an email copy directly below.
           </p>
         </div>
 
-        <div className="p-4 rounded-xl bg-[#0B0B0D] border border-[rgba(243,239,231,0.10)] text-xs text-[#97959F] space-y-2 font-mono">
-          <div className="flex justify-between border-b border-[rgba(243,239,231,0.06)] pb-1.5">
+        <div className="p-4 rounded-xl bg-[#05050A] border border-[#00F0FF]/20 text-xs text-[#8A94B8] space-y-2 font-mono">
+          <div className="flex justify-between border-b border-white/[0.06] pb-1.5">
             <span>Service:</span>
-            <span className="text-[#F3EFE7] font-sans">{submittedData.serviceType}</span>
+            <span className="text-[#F4F6FF] font-sans">{submittedData.serviceType}</span>
           </div>
-          <div className="flex justify-between border-b border-[rgba(243,239,231,0.06)] pb-1.5">
+          <div className="flex justify-between border-b border-white/[0.06] pb-1.5">
             <span>Platform:</span>
-            <span className="text-[#F3EFE7] font-sans">{submittedData.platform}</span>
+            <span className="text-[#F4F6FF] font-sans">{submittedData.platform}</span>
           </div>
-          <div className="flex justify-between border-b border-[rgba(243,239,231,0.06)] pb-1.5">
+          <div className="flex justify-between border-b border-white/[0.06] pb-1.5">
             <span>Budget:</span>
-            <span className="text-[#19C3B8] font-sans">{submittedData.budgetRange}</span>
+            <span className="text-[#00F0FF] font-sans">{submittedData.budgetRange}</span>
           </div>
-          <div className="flex justify-between border-b border-[rgba(243,239,231,0.06)] pb-1.5">
+          <div className="flex justify-between border-b border-white/[0.06] pb-1.5">
             <span>Deadline:</span>
-            <span className="text-[#F3EFE7] font-sans">{submittedData.deadline}</span>
+            <span className="text-[#F4F6FF] font-sans">{submittedData.deadline}</span>
           </div>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
           <a
             href={generateMailtoUrl(submittedData)}
-            className="w-full sm:flex-1 py-3 px-5 rounded-full bg-[#FF6B35] hover:bg-[#FF8859] text-[#0B0B0D] font-semibold text-sm flex items-center justify-center gap-2 transition-all hover:shadow-glow-orange"
+            className="w-full sm:flex-1 py-3 px-5 rounded-full bg-gradient-to-r from-[#00F0FF] to-[#FF007F] text-[#05050A] font-bold text-sm flex items-center justify-center gap-2 transition-all hover:shadow-[0_0_25px_rgba(0,240,255,0.55)]"
           >
             <Mail className="w-4 h-4" />
             <span>Send via Email Client</span>
@@ -265,11 +265,11 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
           <button
             type="button"
             onClick={copySummaryToClipboard}
-            className="w-full sm:w-auto py-3 px-5 rounded-full bg-[#1B1B22] hover:bg-[#252530] text-[#F3EFE7] text-sm font-medium border border-[rgba(243,239,231,0.10)] flex items-center justify-center gap-2 transition-colors"
+            className="w-full sm:w-auto py-3 px-5 rounded-full bg-[#141528] hover:bg-[#1C1E38] text-[#F4F6FF] text-sm font-medium border border-[#00F0FF]/25 flex items-center justify-center gap-2 transition-colors"
           >
             {copied ? (
               <>
-                <CheckCircle2 className="w-4 h-4 text-[#19C3B8]" />
+                <CheckCircle2 className="w-4 h-4 text-[#00F0FF]" />
                 <span>Copied!</span>
               </>
             ) : (
@@ -281,12 +281,12 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
           </button>
         </div>
 
-        <div className="pt-3 border-t border-[rgba(243,239,231,0.10)] flex items-center justify-between text-xs text-[#97959F]">
+        <div className="pt-3 border-t border-[#00F0FF]/15 flex items-center justify-between text-xs text-[#8A94B8]">
           <span>Need to submit another project?</span>
           <button
             type="button"
             onClick={handleReset}
-            className="text-[#FF6B35] hover:underline flex items-center gap-1 font-medium"
+            className="text-[#00F0FF] hover:underline flex items-center gap-1 font-medium"
           >
             <RefreshCw className="w-3 h-3" />
             Reset Form
@@ -383,7 +383,7 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
         />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Select
           id="approximateDuration"
           name="approximateDuration"
@@ -409,18 +409,6 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
         />
 
         <Select
-          id="budgetRange"
-          name="budgetRange"
-          label="Approximate Budget Range"
-          required
-          options={budgetRangeOptions}
-          value={formData.budgetRange || ''}
-          onChange={handleChange}
-          error={errors.budgetRange}
-          placeholder="Select budget range..."
-        />
-
-        <Select
           id="deadline"
           name="deadline"
           label="Target Urgency"
@@ -433,13 +421,56 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
         />
       </div>
 
+      {/* Approximate Budget Range starting from ₹500 + manual entry */}
+      <div className="space-y-2.5">
+        <Input
+          id="budgetRange"
+          name="budgetRange"
+          label="Approximate Budget (Starting ₹500 — Select Preset or Enter Manually)"
+          required
+          placeholder="e.g. ₹500, ₹1,200, or choose a preset below"
+          value={formData.budgetRange || ''}
+          onChange={handleChange}
+          error={errors.budgetRange}
+          helperText="Minimum budget starts at ₹500. Type any custom amount or click a quick preset."
+        />
+        <div className="flex flex-wrap gap-2">
+          {budgetRangeOptions.map((preset) => {
+            const active = formData.budgetRange === preset;
+            return (
+              <button
+                key={preset}
+                type="button"
+                onClick={() => {
+                  setFormData((prev) => ({ ...prev, budgetRange: preset }));
+                  if (errors.budgetRange) {
+                    setErrors((prev) => {
+                      const updated = { ...prev };
+                      delete updated.budgetRange;
+                      return updated;
+                    });
+                  }
+                }}
+                className={`px-3 py-1 rounded-full font-mono text-[11px] border transition-all ${
+                  active
+                    ? 'bg-[#00F0FF]/20 border-[#00F0FF] text-[#00F0FF] shadow-[0_0_12px_rgba(0,240,255,0.3)]'
+                    : 'bg-[#060710] border-[#00F0FF]/20 text-[#8A94B8] hover:border-[#FF007F]/60 hover:text-[#F4F6FF]'
+                }`}
+              >
+                {preset}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <Textarea
         id="projectDescription"
         name="projectDescription"
         label="Project Brief & Goals"
         required
         rows={3}
-        placeholder="Tell Sayan about your footage, desired tone, pacing, references, or specific music/SFX vibes..."
+        placeholder="Tell Sayan about your footage, desired tone, pacing, self-reference style, or specific music/SFX vibes..."
         value={formData.projectDescription}
         onChange={handleChange}
         error={errors.projectDescription}
@@ -448,19 +479,19 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
       <Input
         id="referenceVideoUrl"
         name="referenceVideoUrl"
-        label="Reference Video URL / Footage Drive Link"
-        placeholder="https://youtube.com/watch?v=... or Google Drive link"
+        label="Self-Reference Video URL / Footage Drive Link"
+        placeholder="https://youtube.com/watch?v=... or Instagram/Drive self-reference link"
         value={formData.referenceVideoUrl}
         onChange={handleChange}
         error={errors.referenceVideoUrl}
-        helperText="Link to a video whose style, humor, or pacing you want to emulate."
+        helperText="Self Reference Service available: paste any reference edit URL whose pacing, cuts, or vibe you want matched."
       />
 
       <div className="pt-2">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-3.5 px-6 rounded-full bg-[#FF6B35] text-[#0B0B0D] font-semibold text-sm sm:text-base hover:shadow-glow-orange transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-[#00F0FF] to-[#FF007F] text-[#05050A] font-bold text-sm sm:text-base hover:shadow-[0_0_28px_rgba(0,240,255,0.55)] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
         >
           <Send className="w-4 h-4" />
           <span>{isSubmitting ? 'Formatting Brief...' : 'Send Project Brief to Sayan'}</span>
