@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { contactFormSchema } from '@/lib/validations/contact.schema';
-import { getCollection, isMongoConfigured } from '@/lib/mongodb';
+import { withCollection, isMongoConfigured } from '@/lib/mongodb';
 
 export const dynamic = 'force-dynamic';
 
@@ -83,8 +83,9 @@ export async function POST(request: NextRequest) {
     // 3. Store in MongoDB if configured
     if (isMongoConfigured()) {
       try {
-        const inquiriesCollection = await getCollection('inquiries');
-        const insertResult = await inquiriesCollection.insertOne(inquiryDocument);
+        const insertResult = await withCollection('inquiries', (inquiriesCollection) =>
+          inquiriesCollection.insertOne(inquiryDocument)
+        );
 
         return NextResponse.json(
           {

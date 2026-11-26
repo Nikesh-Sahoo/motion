@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { editorApplicationSchema } from '@/lib/validations/editor-application.schema';
-import { getCollection, isMongoConfigured } from '@/lib/mongodb';
+import { withCollection, isMongoConfigured } from '@/lib/mongodb';
 
 export const dynamic = 'force-dynamic';
 
@@ -78,8 +78,9 @@ export async function POST(request: NextRequest) {
 
     if (isMongoConfigured()) {
       try {
-        const collection = await getCollection('editor_applications');
-        const insertResult = await collection.insertOne(applicationDocument);
+        const insertResult = await withCollection('editor_applications', (collection) =>
+          collection.insertOne(applicationDocument)
+        );
 
         return NextResponse.json(
           {
