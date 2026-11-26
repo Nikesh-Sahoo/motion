@@ -24,23 +24,25 @@ export function Navbar() {
     <>
       <header
         id="nav"
-        className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
-          scrolled
-            ? 'bg-[#0B0B0D]/90 backdrop-blur-md py-3 border-b border-[rgba(243,239,231,0.10)] shadow-lg shadow-black/40'
-            : 'bg-transparent py-5 border-b border-transparent'
-        }`}
+        className="fixed top-3 sm:top-4 left-0 right-0 z-50 px-3 sm:px-6 pointer-events-none transition-all duration-300"
       >
-        <div className="w-[min(74rem,calc(100%-2rem))] mx-auto flex items-center justify-between gap-4">
-          {/* Brand Logo with Attached Motion Emblem */}
+        <div
+          className={`w-[min(76rem,100%)] mx-auto rounded-2xl pointer-events-auto transition-all duration-300 flex items-center justify-between gap-4 py-2.5 px-3.5 sm:px-6 ${
+            scrolled
+              ? 'bg-[#0B0B0D]/90 backdrop-blur-2xl border border-white/[0.12] shadow-[0_12px_40px_rgba(0,0,0,0.7)]'
+              : 'bg-[#111116]/80 backdrop-blur-xl border border-white/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.5)]'
+          }`}
+        >
+          {/* Brand Logo with Attached Motionxyne Emblem */}
           <Link
             href="/#top"
             className="inline-flex items-center gap-3 flex-none rounded-xl transition-transform hover:-translate-y-0.5 group"
-            aria-label="Motion — Home"
+            aria-label="Motionxyne — Home"
           >
-            <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden shadow-[0_0_20px_rgba(25,195,184,0.5)] border border-[rgba(243,239,231,0.15)] group-hover:border-[#19C3B8] group-hover:shadow-[0_0_25px_rgba(25,195,184,0.7)] transition-all flex-shrink-0 bg-[#0B0B0D]">
+            <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-[0_0_20px_rgba(25,195,184,0.55)] border border-[#19C3B8]/40 group-hover:border-[#19C3B8] group-hover:shadow-[0_0_25px_rgba(25,195,184,0.8)] transition-all flex-shrink-0 bg-[#0B0B0D]">
               <Image
                 src="/motion-logo.jpg"
-                alt="Motion Logo"
+                alt="Motionxyne Logo"
                 width={48}
                 height={48}
                 priority
@@ -48,22 +50,22 @@ export function Navbar() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-display text-2xl sm:text-3xl tracking-wider text-[#F3EFE7] uppercase leading-none">
-                MOTION
+              <span className="font-display text-xl sm:text-2xl tracking-wider text-[#F3EFE7] uppercase leading-none group-hover:text-white transition-colors">
+                MOTIONXYNE
               </span>
-              <span className="font-mono text-[9px] bg-gradient-to-r from-[#FF9933] via-white to-[#138808] bg-clip-text text-transparent tracking-widest uppercase font-semibold">
+              <span className="font-mono text-[8px] sm:text-[9px] bg-gradient-to-r from-[#FF9933] via-white to-[#138808] bg-clip-text text-transparent tracking-widest uppercase font-semibold">
                 POST-PRODUCTION 🇮🇳
               </span>
             </div>
           </Link>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center gap-7 text-[0.92rem] text-[#97959F] font-medium" aria-label="Main Navigation">
+          <nav className="hidden lg:flex items-center gap-2 text-[0.88rem] text-[#97959F] font-medium" aria-label="Main Navigation">
             {mainNavLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="hover:text-[#F3EFE7] transition-colors py-1"
+                className="hover:text-[#F3EFE7] hover:bg-white/[0.05] px-3 py-1.5 rounded-lg transition-all"
               >
                 {link.label}
               </a>
@@ -71,10 +73,10 @@ export function Navbar() {
           </nav>
 
           {/* Right Action Button & Mobile Burger */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <a
               href="/#contact"
-              className="inline-flex items-center justify-center px-5 py-2.5 rounded-full border border-[rgba(243,239,231,0.20)] text-[#F3EFE7] hover:border-[#FF6B35] hover:text-[#FF6B35] transition-all text-xs sm:text-sm font-semibold tracking-wide hover:-translate-y-0.5"
+              className="inline-flex items-center justify-center px-4 sm:px-5 py-2 rounded-full bg-[#FF9933] text-[#0B0B0D] hover:shadow-[0_0_20px_rgba(255,153,51,0.6)] font-semibold text-xs sm:text-sm tracking-wide transition-all hover:scale-105 active:scale-95"
             >
               Start a Project
             </a>
@@ -83,9 +85,9 @@ export function Navbar() {
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open navigation menu"
-              className="lg:hidden p-2 rounded-lg text-[#F3EFE7] hover:text-[#FF6B35] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B35]"
+              className="lg:hidden p-2 rounded-xl text-[#F3EFE7] hover:text-[#FF9933] hover:bg-white/[0.06] transition-colors focus:outline-none"
             >
-              <Menu className="w-6 h-6" />
+              <Menu className="w-5 h-5" />
             </button>
           </div>
         </div>

@@ -29,7 +29,7 @@ const valueProps = [
     icon: MessageSquare,
     title: 'Reliable Collaboration',
     description:
-      'Transparent milestones, clear project scoping, organized asset handoffs, and feedback loops make working with Motion predictable and stress-free.',
+      'Transparent milestones, clear project scoping, organized asset handoffs, and feedback loops make working with Motionxyne predictable and stress-free.',
     accent: 'cyan',
   },
 ];

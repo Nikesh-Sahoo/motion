@@ -19,9 +19,9 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Become an Editor | Join the Motion Creative Network',
+  title: 'Become an Editor | Join the Motionxyne Creative Network',
   description:
-    'Join Motion as a video editor. Work on client projects across YouTube, Reels, and brand campaigns. Clear briefs, internal onboarding, and project-based compensation.',
+    'Join Motionxyne as a video editor. Work on client projects across YouTube, Reels, and brand campaigns. Clear briefs, internal onboarding, and project-based compensation.',
 };
 
 const whyJoinPerks = [
@@ -130,23 +130,23 @@ export default function CareersPage() {
           </h1>
 
           <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Join the Motion editor network, collaborate on creative projects, and grow your skills while working with creators and brands.
+            Join the Motionxyne editor network, collaborate on creative projects, and grow your skills while working with creators and brands.
           </p>
 
           <div className="pt-2">
             <Button href="#apply" variant="cyan" size="lg">
-              <span>Apply to Join Motion</span>
+              <span>Apply to Join Motionxyne</span>
               <Sparkles className="w-4 h-4 ml-1 text-slate-950" />
             </Button>
           </div>
         </div>
 
-        {/* Section A: Why Join Motion? */}
+        {/* Section A: Why Join Motionxyne? */}
         <div className="mb-24 pb-20 border-b border-border">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <Badge variant="purple" className="mb-3">Section A</Badge>
             <h2 className="text-3xl font-extrabold text-white">
-              Why Join the Motion Network?
+              Why Join the Motionxyne Network?
             </h2>
             <p className="mt-3 text-sm sm:text-base text-slate-400">
               We empower video editors to focus on what they do best—editing—without the administrative headaches of chasing invoices or deciphering chaotic client briefs.
@@ -281,7 +281,7 @@ export default function CareersPage() {
                   <strong className="text-slate-200 block mb-1">
                     Internal Training Notice:
                   </strong>
-                  Motion is an agency, not a course seller. Selected editors receive free internal onboarding guidelines, templates, and project-specific support. We never charge editors for training or materials.
+                  Motionxyne is an agency, not a course seller. Selected editors receive free internal onboarding guidelines, templates, and project-specific support. We never charge editors for training or materials.
                 </div>
               </div>
             </div>
@@ -293,7 +293,7 @@ export default function CareersPage() {
           <div className="text-center space-y-3">
             <Badge variant="cyan">Section D • Application Form</Badge>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              Apply to Join Motion
+              Apply to Join Motionxyne
             </h2>
             <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto">
               Complete the form below with your portfolio links. Our team reviews submissions regularly and contacts shortlisted editors for an introductory discussion.

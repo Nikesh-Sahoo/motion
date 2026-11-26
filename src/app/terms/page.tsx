@@ -5,9 +5,9 @@ import { siteConfig } from '@/lib/config';
 import { FileText, AlertCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Terms and Conditions | Motion',
+  title: 'Terms and Conditions | Motionxyne',
   description:
-    'Terms and Conditions for using the Motion website, submitting project enquiries, and requesting video post-production services.',
+    'Terms and Conditions for using the Motionxyne website, submitting project enquiries, and requesting video post-production services.',
 };
 
 export default function TermsPage() {
@@ -57,7 +57,7 @@ export default function TermsPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-bold text-white">3. Separate Project Agreements & Scope</h2>
             <p>
-              Each video editing assignment undertaken by Motion is governed by an agreed project statement of work, which explicitly defines:
+              Each video editing assignment undertaken by Motionxyne is governed by an agreed project statement of work, which explicitly defines:
             </p>
             <ul className="list-disc list-inside space-y-1.5 pl-2 text-slate-400">
               <li>Raw footage inputs and delivery formats.</li>
@@ -77,7 +77,7 @@ export default function TermsPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-bold text-white">5. Content Ownership & Intellectual Property</h2>
             <p>
-              Clients retain full ownership of all raw footage, proprietary graphics, and finished video deliverables upon completion of agreed payments. Motion retains no ongoing copyright claim to completed client videos. Motion may request written consent to feature non-confidential finished edits within its portfolio.
+              Clients retain full ownership of all raw footage, proprietary graphics, and finished video deliverables upon completion of agreed payments. Motionxyne retains no ongoing copyright claim to completed client videos. Motionxyne may request written consent to feature non-confidential finished edits within its portfolio.
             </p>
           </section>
 
@@ -91,14 +91,14 @@ export default function TermsPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-bold text-white">7. Non-Course Selling Policy</h2>
             <p>
-              Motion is a professional video editing service and not a course seller or vocational school. We do not sell courses or charge fees for training.
+              Motionxyne is a professional video editing service and not a course seller or vocational school. We do not sell courses or charge fees for training.
             </p>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-xl font-bold text-white">8. Limitation of Liability</h2>
             <p>
-              In no event shall Motion, its founders, or contractors be liable for any indirect, incidental, or consequential damages resulting from website downtime, delays resulting from incomplete client raw assets, or external platform copyright actions on client-provided third-party media.
+              In no event shall Motionxyne, its founders, or contractors be liable for any indirect, incidental, or consequential damages resulting from website downtime, delays resulting from incomplete client raw assets, or external platform copyright actions on client-provided third-party media.
             </p>
           </section>
 

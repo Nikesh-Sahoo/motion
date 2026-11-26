@@ -5,9 +5,9 @@ import { siteConfig } from '@/lib/config';
 import { ShieldCheck, AlertCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Motion',
+  title: 'Privacy Policy | Motionxyne',
   description:
-    'Privacy Policy for Motion. Explains how client project enquiries and communication data are collected, used, and safeguarded.',
+    'Privacy Policy for Motionxyne. Explains how client project enquiries and communication data are collected, used, and safeguarded.',
 };
 
 export default function PrivacyPolicyPage() {
@@ -43,7 +43,7 @@ export default function PrivacyPolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-bold text-white">1. Overview</h2>
             <p>
-              Motion (&ldquo;we&rdquo;, &ldquo;our&rdquo;, or &ldquo;us&rdquo;) operates the website at{' '}
+              Motionxyne (&ldquo;we&rdquo;, &ldquo;our&rdquo;, or &ldquo;us&rdquo;) operates the website at{' '}
               <span className="text-accent-cyan font-mono">{siteConfig.url}</span>. This Privacy Policy informs visitors and users regarding our policies with the collection, use, and disclosure of personal data when using our website and contacting our agency.
             </p>
           </section>
@@ -96,7 +96,7 @@ export default function PrivacyPolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-bold text-white">5. Video Footage and Intellectual Property</h2>
             <p>
-              Client footage provided via cloud storage links (e.g., Google Drive, Dropbox, Frame.io) remains the exclusive property of the client. Motion does not use raw footage for external promotional purposes without written consent.
+              Client footage provided via cloud storage links (e.g., Google Drive, Dropbox, Frame.io) remains the exclusive property of the client. Motionxyne does not use raw footage for external promotional purposes without written consent.
             </p>
           </section>
 
@@ -110,7 +110,7 @@ export default function PrivacyPolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-bold text-white">7. Your Rights and Inquiries</h2>
             <p>
-              You have the right to request access to, correction of, or deletion of your personal data submitted to Motion. For any privacy-related questions or deletion requests, please contact us at:
+              You have the right to request access to, correction of, or deletion of your personal data submitted to Motionxyne. For any privacy-related questions or deletion requests, please contact us at:
             </p>
             <div className="p-4 rounded-xl bg-surface border border-border font-mono text-xs text-accent-cyan">
               Email: {siteConfig.contact.email}

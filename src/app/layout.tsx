@@ -7,16 +7,17 @@ import { siteConfig } from '@/lib/config';
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: 'Motion — Video Editing & Creative Post-Production',
-    template: '%s | Motion',
+    default: 'Motionxyne — Creative Post-Production & Video Editing',
+    template: '%s | Motionxyne',
   },
   description:
-    'Motion by Sayan — reels, travel films, YouTube edits, and brand content cut to hold attention.',
+    'Motionxyne by Sayan — creative post-production & video editing studio. High-retention reels, YouTube edits, travel films, and commercial brand content cut to hold attention.',
   keywords: [
-    'Motion',
-    'Motion video editing',
+    'Motionxyne',
+    'Motionxyne post-production',
+    'Motionxyne video editing',
     'Sayan',
-    'video editing',
+    'video editing agency India',
     'YouTube video editor',
     'reels editing',
     'creative post-production',
@@ -24,8 +25,8 @@ export const metadata: Metadata = {
     'short form editor',
   ],
   authors: [{ name: 'Sayan' }],
-  creator: 'Motion',
-  publisher: 'Motion',
+  creator: 'Motionxyne',
+  publisher: 'Motionxyne',
   robots: {
     index: true,
     follow: true,
@@ -34,16 +35,16 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: siteConfig.url,
-    title: 'Motion — Video Editing & Creative Post-Production',
+    title: 'Motionxyne — Creative Post-Production & Video Editing',
     description:
-      'Reels, travel films, YouTube edits, and brand content cut to hold attention. By Sayan.',
-    siteName: 'Motion',
+      'High-retention reels, YouTube edits, travel films, and commercial brand content cut to hold attention. By Sayan at Motionxyne.',
+    siteName: 'Motionxyne',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Motion — Video Editing & Creative Post-Production',
+    title: 'Motionxyne — Creative Post-Production & Video Editing',
     description:
-      'Reels, travel films, YouTube edits, and brand content cut to hold attention.',
+      'Reels, travel films, YouTube edits, and brand content cut to hold attention. Motionxyne.',
   },
   icons: {
     icon: [

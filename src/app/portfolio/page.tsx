@@ -1,11 +1,12 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { longVideos, shortVideos } from '@/data/portfolio';
+import { Tilt3D } from '@/components/ui/Tilt3D';
 
 export const metadata: Metadata = {
-  title: 'Our Work | Motion Video Editing Portfolio',
+  title: 'Our Work | Motionxyne Portfolio',
   description:
-    'Watch real client video edits by Sayan at Motion: YouTube finance storytelling, vlogs, gameplay, real estate films, and viral shorts.',
+    'Watch real client video edits by Sayan at Motionxyne: YouTube finance storytelling, vlogs, gameplay, real estate films, and viral shorts.',
 };
 
 export default function PortfolioPage() {
@@ -36,31 +37,38 @@ export default function PortfolioPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 perspective-stage">
             {longVideos.map((video) => (
-              <article
+              <Tilt3D
                 key={video.id}
-                className="overflow-hidden border border-[#000] rounded-2xl bg-[#F7F6F1] shadow-card hover:shadow-card-hover transition-all duration-300"
+                maxTilt={5}
+                scale={1.015}
+                glareColor="rgba(25, 195, 184, 0.14)"
+                className="rounded-2xl h-full"
               >
-                <div className="relative aspect-video bg-[#121216] overflow-hidden">
-                  <iframe
-                    src={video.embedUrl}
-                    title={video.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    loading="lazy"
-                    className="w-full h-full border-0 block"
-                  />
-                </div>
-                <div className="p-4 bg-[#15151B] border-t border-[rgba(243,239,231,0.10)] flex items-center justify-between">
-                  <span className="font-display text-base uppercase text-[#F3EFE7]">
-                    {video.title}
-                  </span>
-                  <span className="font-mono text-xs text-[#19C3B8]">
-                    {video.category}
-                  </span>
-                </div>
-              </article>
+                <article
+                  className="h-full overflow-hidden border border-white/[0.10] hover:border-[#19C3B8]/60 rounded-2xl bg-[#15151B] shadow-[0_14px_34px_rgba(0,0,0,0.6)] hover:shadow-[0_20px_44px_rgba(25,195,184,0.18)] transition-all duration-300"
+                >
+                  <div className="relative aspect-video bg-[#121216] overflow-hidden">
+                    <iframe
+                      src={video.embedUrl}
+                      title={video.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      loading="lazy"
+                      className="w-full h-full border-0 block"
+                    />
+                  </div>
+                  <div className="p-4 bg-[#15151B] border-t border-[rgba(243,239,231,0.10)] flex items-center justify-between">
+                    <span className="font-display text-base uppercase text-[#F3EFE7]">
+                      {video.title}
+                    </span>
+                    <span className="font-mono text-xs text-[#19C3B8]">
+                      {video.category}
+                    </span>
+                  </div>
+                </article>
+              </Tilt3D>
             ))}
           </div>
         </div>
@@ -77,29 +85,36 @@ export default function PortfolioPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 perspective-stage">
             {shortVideos.map((short) => (
-              <div
+              <Tilt3D
                 key={short.id}
-                className="relative rounded-2xl overflow-hidden border border-[rgba(243,239,231,0.10)] bg-[#15151B] flex flex-col justify-between"
+                maxTilt={7}
+                scale={1.025}
+                glareColor="rgba(255, 153, 51, 0.16)"
+                className="rounded-2xl h-full"
               >
-                <div className="relative aspect-[9/16] w-full bg-[#121216] overflow-hidden">
-                  <iframe
-                    src={short.embedUrl}
-                    title={short.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    loading="lazy"
-                    className="w-full h-full border-0 block"
-                  />
-                </div>
+                <div
+                  className="h-full relative rounded-2xl overflow-hidden border border-[rgba(243,239,231,0.10)] hover:border-[#FF9933]/60 bg-[#15151B] flex flex-col justify-between transition-colors"
+                >
+                  <div className="relative aspect-[9/16] w-full bg-[#121216] overflow-hidden">
+                    <iframe
+                      src={short.embedUrl}
+                      title={short.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      loading="lazy"
+                      className="w-full h-full border-0 block"
+                    />
+                  </div>
 
-                <div className="p-3 bg-[#15151B] border-t border-[rgba(243,239,231,0.10)] text-center">
-                  <span className="font-mono text-[11px] text-[#97959F] block truncate">
-                    {short.subtitle}
-                  </span>
+                  <div className="p-3 bg-[#15151B] border-t border-[rgba(243,239,231,0.10)] text-center">
+                    <span className="font-mono text-[11px] text-[#97959F] block truncate">
+                      {short.subtitle}
+                    </span>
+                  </div>
                 </div>
-              </div>
+              </Tilt3D>
             ))}
           </div>
         </div>

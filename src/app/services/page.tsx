@@ -4,9 +4,9 @@ import { servicesData } from '@/data/services';
 import { ServiceDetail } from '@/components/services/ServiceDetail';
 
 export const metadata: Metadata = {
-  title: 'Services | Video Editing & Creative Post-Production',
+  title: 'Services | Motionxyne Post-Production',
   description:
-    'Motion video editing services: Short-Form Content (Reels/Shorts/TikTok), YouTube & Long Form, and Brand & Promo Edits by Sayan.',
+    'Motionxyne video editing services: Short-Form Content (Reels/Shorts/TikTok), YouTube & Long Form, and Brand & Promo Edits by Sayan.',
 };
 
 export default function ServicesPage() {
@@ -47,9 +47,9 @@ export default function ServicesPage() {
 
           <a
             href="/#contact"
-            className="inline-flex items-center justify-center px-7 py-3 rounded-full bg-[#FF6B35] text-[#0B0B0D] font-semibold text-sm hover:shadow-glow-orange transition-all"
+            className="inline-flex items-center justify-center px-7 py-3 rounded-full bg-[#FF9933] text-[#0B0B0D] font-bold text-sm hover:shadow-[0_0_25px_rgba(255,153,51,0.6)] transition-all"
           >
-            Start a Project with Motion
+            Start a Project with Motionxyne
           </a>
         </div>
       </div>

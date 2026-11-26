@@ -40,7 +40,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 />
               </div>
               <span className="font-display text-2xl text-[#F3EFE7] uppercase tracking-wider">
-                MOTION
+                MOTIONXYNE
               </span>
             </Link>
 
@@ -81,7 +81,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         {/* Footer in mobile drawer */}
         <div className="pt-6 border-t border-[rgba(243,239,231,0.10)] space-y-3 text-center">
           <p className="text-xs text-[#97959F]">
-            Motion • {siteConfig.contact.location}
+            Motionxyne • 🇮🇳 {siteConfig.contact.location}
           </p>
           <a
             href={`mailto:${siteConfig.contact.email}`}

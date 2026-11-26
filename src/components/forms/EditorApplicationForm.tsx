@@ -98,12 +98,52 @@ export function EditorApplicationForm() {
     const validatedData = validationResult.data;
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      const response = await fetch('/api/editor-applications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(validatedData),
+      });
+
+      const result = (await response.json()) as {
+        success?: boolean;
+        fieldErrors?: Record<string, string>;
+        details?: string;
+        error?: string;
+        simulated?: boolean;
+        message?: string;
+      };
+
+      if (!response.ok || !result.success) {
+        if (result.fieldErrors) {
+          setErrors(result.fieldErrors);
+        } else {
+          setErrors({
+            form:
+              result.details ||
+              result.error ||
+              'Failed to save application. Please try again or email us directly.',
+          });
+        }
+        return;
+      }
+
+      if (result.simulated) {
+        setErrors({
+          form:
+            result.message ||
+            'MongoDB is not configured yet; application was not persisted.',
+        });
+        return;
+      }
+
       setSubmittedData(validatedData);
       setSubmitSuccess(true);
-    } catch {
+    } catch (err: unknown) {
+      console.error('Network submission error:', err);
       setErrors({
-        form: 'Submission preparation failed. Please email your application directly to our talent desk.',
+        form: 'An unexpected error occurred while submitting. Please try again or email us directly.',
       });
     } finally {
       setIsSubmitting(false);
@@ -131,7 +171,7 @@ ${data.portfolioUrl}
 Secondary Work Link:
 ${data.sampleWorkUrl || 'N/A'}
 
-Motivation & Why Motion:
+Motivation & Why Motionxyne:
 ${data.motivation}
 
 Consent Confirmed: Yes, authorized to share portfolio samples.
@@ -142,7 +182,7 @@ Consent Confirmed: Yes, authorized to share portfolio samples.
 
   const copySummaryToClipboard = () => {
     if (!submittedData) return;
-    const text = `Motion Editor Application:
+    const text = `Motionxyne Editor Application:
 Name: ${submittedData.fullName}
 Email: ${submittedData.email}
 Phone: ${submittedData.phone}
@@ -439,7 +479,7 @@ Motivation: ${submittedData.motivation}`;
         <Textarea
           id="motivation"
           name="motivation"
-          label="Why do you want to collaborate with Motion?"
+          label="Why do you want to collaborate with Motionxyne?"
           required
           rows={3}
           placeholder="Tell us about the kinds of creators or content styles you love editing, and what you hope to achieve with our team..."
@@ -461,7 +501,7 @@ Motivation: ${submittedData.motivation}`;
             className="mt-1 h-4 w-4 rounded border-border bg-slate-900 text-accent-cyan focus:ring-accent-cyan focus:ring-offset-background cursor-pointer"
           />
           <span className="text-xs text-slate-300 leading-relaxed">
-            I confirm that I own or have permission to share all portfolio links, video edits, and personal contact details submitted above for the purpose of evaluation by Motion. <span className="text-accent-cyan">*</span>
+            I confirm that I own or have permission to share all portfolio links, video edits, and personal contact details submitted above for the purpose of evaluation by Motionxyne. <span className="text-accent-cyan">*</span>
           </span>
         </label>
         {errors.consentAgreed && (
@@ -479,7 +519,7 @@ Motivation: ${submittedData.motivation}`;
           className="w-full justify-center shadow-glow-cyan"
         >
           <UserCheck className="w-4 h-4 text-slate-950" />
-          <span>Apply to Join Motion</span>
+          <span>Apply to Join Motionxyne</span>
         </Button>
 
         <p className="text-center text-xs text-slate-400 leading-relaxed">

@@ -93,12 +93,53 @@ export function ContactForm() {
     const validatedData = validationResult.data;
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      // Submit inquiry data to MongoDB API
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(validatedData),
+      });
+
+      const result = (await response.json()) as {
+        success?: boolean;
+        fieldErrors?: Record<string, string>;
+        details?: string;
+        error?: string;
+        simulated?: boolean;
+        message?: string;
+      };
+
+      if (!response.ok || !result.success) {
+        if (result.fieldErrors) {
+          setErrors(result.fieldErrors);
+        } else {
+          setErrors({
+            form:
+              result.details ||
+              result.error ||
+              'Failed to save inquiry. Please try again or email us directly.',
+          });
+        }
+        return;
+      }
+
+      if (result.simulated) {
+        setErrors({
+          form:
+            result.message ||
+            'MongoDB is not configured yet; inquiry was not persisted.',
+        });
+        return;
+      }
+
       setSubmittedData(validatedData);
       setSubmitSuccess(true);
-    } catch {
+    } catch (err: unknown) {
+      console.error('Network submission error:', err);
       setErrors({
-        form: 'An unexpected error occurred. Please try again or email us directly.',
+        form: 'An unexpected error occurred while submitting. Please try again or email us directly.',
       });
     } finally {
       setIsSubmitting(false);
@@ -107,7 +148,7 @@ export function ContactForm() {
 
   const generateMailtoUrl = (data: ContactFormData) => {
     const subject = encodeURIComponent(
-      `[Motion Project Enquiry] ${data.serviceType} - ${data.fullName}`
+      `[Motionxyne Project Enquiry] ${data.serviceType} - ${data.fullName}`
     );
     const body = encodeURIComponent(
       `Client Name: ${data.fullName}
@@ -137,7 +178,7 @@ ${data.additionalRequirements || 'N/A'}
 
   const copySummaryToClipboard = () => {
     if (!submittedData) return;
-    const text = `Motion Project Enquiry:
+    const text = `Motionxyne Project Enquiry:
 Name: ${submittedData.fullName}
 Email: ${submittedData.email}
 Phone: ${submittedData.phone || 'N/A'}
@@ -185,10 +226,10 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
 
         <div className="text-center space-y-2 max-w-lg mx-auto">
           <h3 className="font-display text-2xl text-[#F3EFE7] uppercase">
-            Project Brief Ready!
+            Inquiry Saved & Brief Ready!
           </h3>
           <p className="text-xs sm:text-sm text-[#97959F] leading-relaxed">
-            Thank you, <span className="text-[#FF6B35] font-semibold">{submittedData.fullName}</span>. Your brief has been formatted. Click below to launch your email client and send this directly to <span className="text-[#F3EFE7] font-mono">{siteConfig.contact.email}</span>.
+            Thank you, <span className="text-[#FF9933] font-semibold">{submittedData.fullName}</span>. Your project brief has been recorded in our database. Sayan will review your requirements and respond within 24–48 hours. You may also send an email copy directly below.
           </p>
         </div>
 
@@ -342,7 +383,7 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
         />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Select
           id="approximateDuration"
           name="approximateDuration"
@@ -365,6 +406,18 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
           onChange={handleChange}
           error={errors.numberOfVideos}
           placeholder="Select quantity..."
+        />
+
+        <Select
+          id="budgetRange"
+          name="budgetRange"
+          label="Approximate Budget Range"
+          required
+          options={budgetRangeOptions}
+          value={formData.budgetRange || ''}
+          onChange={handleChange}
+          error={errors.budgetRange}
+          placeholder="Select budget range..."
         />
 
         <Select

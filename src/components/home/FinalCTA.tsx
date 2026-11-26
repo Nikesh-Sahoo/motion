@@ -7,12 +7,16 @@ import { ContactForm } from '@/components/forms/ContactForm';
 
 export function FinalCTA() {
   return (
-    <section id="contact" className="py-16 sm:py-24 bg-[#0B0B0D] scroll-mt-24 border-t border-[rgba(243,239,231,0.10)]">
-      <div className="w-[min(74rem,calc(100%-2rem))] mx-auto">
-        <div className="rounded-3xl border border-[rgba(243,239,231,0.10)] p-8 sm:p-14 bg-gradient-to-br from-[#15151B] via-[#0B0B0D] to-[#15151B] shadow-2xl">
+    <section id="contact" className="py-16 sm:py-24 bg-[#0B0B0D] scroll-mt-24 border-t border-white/[0.08] relative">
+      <div className="w-[min(76rem,calc(100%-2rem))] mx-auto relative z-10">
+        <div className="rounded-3xl border border-white/[0.12] p-8 sm:p-14 bg-[#121219]/90 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.8)] relative overflow-hidden">
+          {/* Subtle Accent Glows */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#19C3B8]/10 blur-[100px] pointer-events-none rounded-full" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#FF9933]/10 blur-[100px] pointer-events-none rounded-full" />
+
           {/* Section Header */}
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <div className="eyebrow justify-center mb-3">GOT FOOTAGE? LET&apos;S TALK</div>
+          <div className="text-center max-w-2xl mx-auto mb-10 relative z-10">
+            <div className="eyebrow justify-center mb-3">MOTIONXYNE INQUIRY DESK 🇮🇳</div>
             <h2 className="font-display text-4xl sm:text-5xl md:text-6xl text-[#F3EFE7] uppercase leading-[1.02] mb-4">
               LET&apos;S CUT SOMETHING<br />
               <span className="bg-gradient-to-r from-[#FF9933] via-[#FFFFFF] to-[#138808] bg-clip-text text-transparent">
@@ -20,24 +24,24 @@ export function FinalCTA() {
               </span>
             </h2>
             <p className="text-base sm:text-lg text-[#97959F] leading-relaxed">
-              Send your footage and a quick brief. Turnaround is usually 48–72 hours depending on length and scope.
+              Send your raw footage and brief. We store your requirements into our MongoDB pipeline and reply within 24–48 hours with a customized quotation.
             </p>
 
             {/* Direct action buttons */}
             <div className="flex flex-wrap items-center justify-center gap-4 mt-6">
               <a
-                href={`mailto:${siteConfig.contact.email}?subject=Project%20Inquiry`}
-                className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#FF9933] text-[#0B0B0D] font-semibold text-sm sm:text-base hover:shadow-[0_0_20px_rgba(255,153,51,0.5)] transition-all hover:-translate-y-0.5"
+                href={`mailto:${siteConfig.contact.email}?subject=Project%20Inquiry%20to%20Motionxyne`}
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#FF9933] text-[#0B0B0D] font-bold text-sm sm:text-base hover:shadow-[0_0_25px_rgba(255,153,51,0.6)] transition-all hover:-translate-y-0.5"
               >
                 <Mail className="w-4 h-4" />
-                <span>Email Sayan</span>
+                <span>Email Sayan Directly</span>
               </a>
 
               <a
                 href={siteConfig.social.upwork}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-7 py-3 rounded-full border border-[rgba(243,239,231,0.20)] text-[#F3EFE7] font-semibold text-sm sm:text-base hover:border-[#138808] hover:text-[#138808] transition-all hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white/[0.04] border border-white/[0.15] text-[#F3EFE7] font-semibold text-sm sm:text-base hover:border-[#19C3B8] hover:text-[#19C3B8] transition-all hover:-translate-y-0.5"
               >
                 <span>View Upwork Profile</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -45,7 +49,10 @@ export function FinalCTA() {
             </div>
 
             {/* Contact Meta Info */}
-            <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 font-mono text-xs text-[#97959F] border-t border-[rgba(243,239,231,0.10)] pt-6 mt-8">
+            <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 font-mono text-xs text-[#97959F] border-t border-white/[0.08] pt-6 mt-8">
+              <div>
+                STUDIO — <b className="text-[#F3EFE7]">MOTIONXYNE</b>
+              </div>
               <div>
                 EMAIL — <b className="text-[#F3EFE7]">{siteConfig.contact.email}</b>
               </div>

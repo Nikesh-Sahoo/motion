@@ -1,12 +1,11 @@
 import React from 'react';
 import { Metadata } from 'next';
-import Image from 'next/image';
 import { siteConfig } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: 'About | Sayan — Motion Video Editing & Creative Post-Production',
+  title: 'About | Sayan — Motionxyne Creative Post-Production',
   description:
-    'About Sayan and Motion. Professional video editor based in Bhubaneswar, India with 3+ years experience, 50+ completed client edits, working with creators and brands worldwide.',
+    'About Sayan and Motionxyne. Professional video editing and post-production studio based in Bhubaneswar, India, working with creators and brands worldwide.',
 };
 
 export default function AboutPage() {
@@ -26,32 +25,9 @@ export default function AboutPage() {
   return (
     <div className="pt-28 pb-20 bg-[#0B0B0D]">
       <div className="w-[min(74rem,calc(100%-2rem))] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-          {/* Portrait Image with photo corners */}
-          <div className="lg:col-span-5">
-            <div className="relative aspect-square w-full max-w-md mx-auto rounded-2xl overflow-hidden border border-[rgba(243,239,231,0.10)] bg-[#15151B]">
-              <Image
-                src="/mayank-about.png"
-                alt="Sayan — video editor and visual storyteller"
-                width={1254}
-                height={1254}
-                className="w-full h-full object-cover object-center"
-                priority
-              />
-
-              <div className="absolute top-3.5 left-3.5 w-5 h-5 border-t-2 border-l-2 border-[#F3EFE7] opacity-60" />
-              <div className="absolute top-3.5 right-3.5 w-5 h-5 border-t-2 border-r-2 border-[#F3EFE7] opacity-60" />
-              <div className="absolute bottom-3.5 left-3.5 w-5 h-5 border-b-2 border-l-2 border-[#F3EFE7] opacity-60" />
-              <div className="absolute bottom-3.5 right-3.5 w-5 h-5 border-b-2 border-r-2 border-[#F3EFE7] opacity-60" />
-
-              <span className="absolute bottom-4 left-4 font-mono text-[10px] tracking-wider text-[#97959F]">
-                SAYAN • MOTION
-              </span>
-            </div>
-          </div>
-
+        <div className="max-w-3xl mx-auto">
           {/* Copy and Meta */}
-          <div className="lg:col-span-7 space-y-6">
+          <div className="space-y-6">
             <div>
               <div className="eyebrow">ABOUT</div>
               <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-[#F3EFE7] uppercase leading-[1.02] mb-4">

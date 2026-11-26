@@ -5,9 +5,9 @@ import { ContactForm } from '@/components/forms/ContactForm';
 import { Mail, ExternalLink } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Contact | Motion Video Editing',
+  title: 'Contact | Motionxyne Creative Post-Production',
   description:
-    'Send your video footage and brief to Sayan at Motion. Turnaround 48-72 hours. Email: sayanedits@gmail.com, Phone: +91 6370283042, Based in: Bhubaneswar, India.',
+    'Send your video footage and brief to Sayan at Motionxyne. Turnaround 48-72 hours. Email: sayanedits@gmail.com, Phone: +91 6370283042, Based in: Bhubaneswar, India.',
 };
 
 export default function ContactPage() {

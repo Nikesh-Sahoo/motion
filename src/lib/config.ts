@@ -1,11 +1,11 @@
 export const siteConfig = {
-  name: 'Motion',
+  name: 'Motionxyne',
   founder: 'Sayan',
   tagline: 'BORING GETS SKIPPED. WE MAKE IT UNMISSABLE.',
   supportingStatement:
     'We engineer scroll-stopping video edits built for ruthless retention: viral Reels, cinematic YouTube storytelling, and high-impact brand films designed to turn casual viewers into obsessed followers.',
   description:
-    'Motion by Sayan — video editing for creators & brands. Reels, YouTube edits, travel films, and promotional content cut to hold attention.',
+    'Motionxyne by Sayan — creative post-production & video editing studio for creators, brands, and agencies worldwide. Based in Bhubaneswar, India.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
   api: {
     baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1',

@@ -9,11 +9,11 @@ export function Footer() {
       <div className="w-[min(74rem,calc(100%-2rem))] mx-auto">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-6 border-b border-[rgba(243,239,231,0.10)]">
           {/* Logo with attached emblem */}
-          <Link href="/#top" className="inline-flex items-center gap-3 group" aria-label="Motion — Home">
+          <Link href="/#top" className="inline-flex items-center gap-3 group" aria-label="Motionxyne — Home">
             <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(25,195,184,0.45)] border border-[rgba(243,239,231,0.15)] group-hover:border-[#19C3B8] group-hover:shadow-[0_0_20px_rgba(25,195,184,0.6)] transition-all flex-shrink-0 bg-[#0B0B0D]">
               <Image
                 src="/motion-logo.jpg"
-                alt="Motion"
+                alt="Motionxyne"
                 width={40}
                 height={40}
                 className="w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform duration-300"
@@ -21,17 +21,17 @@ export function Footer() {
             </div>
             <div className="flex flex-col">
               <span className="font-display text-2xl tracking-wider text-[#F3EFE7] uppercase leading-none">
-                MOTION
+                MOTIONXYNE
               </span>
-              <span className="font-mono text-[9px] text-[#19C3B8] tracking-widest uppercase">
-                POST-PRODUCTION
+              <span className="font-mono text-[9px] bg-gradient-to-r from-[#FF9933] via-white to-[#138808] bg-clip-text text-transparent tracking-widest uppercase font-semibold">
+                POST-PRODUCTION 🇮🇳
               </span>
             </div>
           </Link>
 
           {/* Middle statement */}
           <p className="font-mono text-xs text-[#97959F] text-center sm:text-left">
-            © 2025 Motion • {siteConfig.contact.location} — All rights reserved.
+            © 2026 Motionxyne • 🇮🇳 {siteConfig.contact.location} — All rights reserved.
           </p>
 
           {/* Socials & Links */}
