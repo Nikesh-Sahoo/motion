@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import {
   contactFormSchema,
   ContactFormData,
+  parseBudgetAmount,
+  type PaymentMode,
   serviceTypeOptions,
   platformOptions,
   budgetRangeOptions,
@@ -23,6 +26,8 @@ import {
   ExternalLink,
   Mail,
   RefreshCw,
+  QrCode,
+  ShieldCheck,
 } from 'lucide-react';
 
 export function ContactForm() {
@@ -40,6 +45,11 @@ export function ContactForm() {
     projectDescription: '',
     referenceVideoUrl: '',
     additionalRequirements: '',
+    paymentMode: 'none',
+    totalProjectAmount: 500,
+    paidAmount: 0,
+    utrReference: '',
+    paymentConfirmed: false,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -48,13 +58,73 @@ export function ContactForm() {
   const [submittedData, setSubmittedData] = useState<ContactFormData | null>(null);
   const [copied, setCopied] = useState(false);
 
+  const selectPaymentMode = (mode: PaymentMode, budgetVal?: string) => {
+    const budgetStr = budgetVal ?? formData.budgetRange ?? '';
+    const baseTotal = parseBudgetAmount(budgetStr);
+    const nextPaid =
+      mode === 'full' ? baseTotal : mode === 'partial' ? Math.max(100, Math.round(baseTotal * 0.5)) : 0;
+
+    setFormData((prev) => ({
+      ...prev,
+      paymentMode: mode,
+      totalProjectAmount: baseTotal,
+      paidAmount: nextPaid,
+      utrReference: mode === 'none' ? '' : prev.utrReference || '',
+      paymentConfirmed: mode === 'none' ? false : Boolean(prev.paymentConfirmed),
+    }));
+
+    setErrors((prev) => {
+      const updated = { ...prev };
+      delete updated.paidAmount;
+      delete updated.utrReference;
+      delete updated.paymentConfirmed;
+      return updated;
+    });
+  };
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type } = e.target;
+    if (type === 'checkbox') {
+      const checked = (e.target as HTMLInputElement).checked;
+      setFormData((prev) => ({ ...prev, [name]: checked }));
+    } else if (name === 'budgetRange') {
+      const parsed = parseBudgetAmount(value);
+      setFormData((prev) => {
+        const mode = prev.paymentMode || 'none';
+        const nextPaid =
+          mode === 'full'
+            ? parsed
+            : mode === 'partial'
+            ? Math.max(100, Math.round(parsed * 0.5))
+            : 0;
+        return {
+          ...prev,
+          budgetRange: value,
+          totalProjectAmount: parsed,
+          paidAmount: mode === 'none' ? 0 : nextPaid,
+        };
+      });
+    } else if (name === 'totalProjectAmount') {
+      const numTotal = Math.max(0, Number(value) || 0);
+      setFormData((prev) => ({
+        ...prev,
+        totalProjectAmount: numTotal,
+        paidAmount:
+          prev.paymentMode === 'full'
+            ? numTotal
+            : prev.paymentMode === 'partial'
+            ? Math.min(numTotal, Math.max(100, Math.round(numTotal * 0.5)))
+            : 0,
+      }));
+    } else if (name === 'paidAmount') {
+      setFormData((prev) => ({ ...prev, paidAmount: Math.max(0, Number(value) || 0) }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
     if (errors[name]) {
       setErrors((prev) => {
         const updated = { ...prev };
@@ -162,6 +232,8 @@ Approximate Duration: ${data.approximateDuration}
 Number of Videos: ${data.numberOfVideos}
 Budget Range: ${data.budgetRange}
 Target Deadline: ${data.deadline}
+Payment Mode: ${data.paymentMode || 'none'}
+Paid Now: ₹${data.paymentMode !== 'none' ? data.paidAmount || 0 : 0}${data.utrReference ? ` (UTR: ${data.utrReference})` : ''}
 
 Project Description:
 ${data.projectDescription}
@@ -188,6 +260,7 @@ Duration: ${submittedData.approximateDuration}
 Videos: ${submittedData.numberOfVideos}
 Budget: ${submittedData.budgetRange}
 Deadline: ${submittedData.deadline}
+Payment: ${submittedData.paymentMode !== 'none' ? `${submittedData.paymentMode} - ₹${submittedData.paidAmount} (UTR: ${submittedData.utrReference || 'N/A'})` : 'Pay After Quote'}
 Description: ${submittedData.projectDescription}
 Reference: ${submittedData.referenceVideoUrl || 'None'}`;
 
@@ -211,6 +284,11 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
       projectDescription: '',
       referenceVideoUrl: '',
       additionalRequirements: '',
+      paymentMode: 'none',
+      totalProjectAmount: 500,
+      paidAmount: 0,
+      utrReference: '',
+      paymentConfirmed: false,
     });
     setErrors({});
     setSubmitSuccess(false);
@@ -218,6 +296,13 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
   };
 
   if (submitSuccess && submittedData) {
+    const paidNow =
+      submittedData.paymentMode !== 'none' ? Number(submittedData.paidAmount || 0) : 0;
+    const totalAmt = Number(
+      submittedData.totalProjectAmount || parseBudgetAmount(submittedData.budgetRange)
+    );
+    const remainingAmt = Math.max(0, totalAmt - paidNow);
+
     return (
       <div className="rounded-2xl bg-[#0D0E1A] border border-[#00F0FF]/45 p-6 sm:p-8 shadow-[0_0_40px_rgba(0,240,255,0.15)] space-y-6">
         <div className="w-12 h-12 rounded-xl bg-[#00F0FF]/15 border border-[#00F0FF]/40 text-[#00F0FF] flex items-center justify-center mx-auto">
@@ -226,10 +311,13 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
 
         <div className="text-center space-y-2 max-w-lg mx-auto">
           <h3 className="font-display text-2xl text-[#F4F6FF] uppercase">
-            Inquiry Saved &amp; Brief Ready!
+            {paidNow > 0 ? 'Inquiry & UTR Submitted!' : 'Inquiry Saved & Brief Ready!'}
           </h3>
           <p className="text-xs sm:text-sm text-[#8A94B8] leading-relaxed">
-            Thank you, <span className="text-[#FF007F] font-semibold">{submittedData.fullName}</span>. Your project brief has been recorded in our database. Sayan will review your requirements and respond within 24–48 hours. You may also send an email copy directly below.
+            Thank you, <span className="text-[#FF007F] font-semibold">{submittedData.fullName}</span>.{' '}
+            {paidNow > 0
+              ? 'Your brief and UPI UTR reference have been queued for payment verification. Once our team verifies the actual ₹ received against your UTR, your confirmed paid and remaining balance will update.'
+              : 'Your project brief has been recorded in our database. Sayan will review your requirements and respond within 24–48 hours.'}
           </p>
         </div>
 
@@ -250,6 +338,18 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
             <span>Deadline:</span>
             <span className="text-[#F4F6FF] font-sans">{submittedData.deadline}</span>
           </div>
+          {paidNow > 0 && (
+            <>
+              <div className="flex justify-between border-b border-white/[0.06] pb-1.5">
+                <span>Payment Claim ({submittedData.paymentMode?.toUpperCase()}):</span>
+                <span className="text-amber-300 font-semibold">₹{paidNow} Pending Verification (UTR: {submittedData.utrReference})</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Estimated Balance After Verification:</span>
+                <span className="text-[#00F0FF] font-semibold">₹{remainingAmt}</span>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
@@ -442,7 +542,22 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
                 key={preset}
                 type="button"
                 onClick={() => {
-                  setFormData((prev) => ({ ...prev, budgetRange: preset }));
+                  const parsed = parseBudgetAmount(preset);
+                  setFormData((prev) => {
+                    const mode = prev.paymentMode || 'none';
+                    const nextPaid =
+                      mode === 'full'
+                        ? parsed
+                        : mode === 'partial'
+                        ? Math.max(100, Math.round(parsed * 0.5))
+                        : 0;
+                    return {
+                      ...prev,
+                      budgetRange: preset,
+                      totalProjectAmount: parsed,
+                      paidAmount: mode === 'none' ? 0 : nextPaid,
+                    };
+                  });
                   if (errors.budgetRange) {
                     setErrors((prev) => {
                       const updated = { ...prev };
@@ -463,6 +578,142 @@ Reference: ${submittedData.referenceVideoUrl || 'None'}`;
           })}
         </div>
       </div>
+
+      {/* Partial or Full Payment via Attached UPI QR */}
+      {Boolean(formData.budgetRange && formData.budgetRange.trim().length > 0) && (
+        <div className="rounded-2xl bg-[#060710] border border-[#00F0FF]/30 p-4 sm:p-5 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <QrCode className="w-4 h-4 text-[#00F0FF]" />
+              <span className="font-mono text-xs uppercase tracking-wider text-[#F4F6FF] font-semibold">
+                Payment Option (Partial Advance or Full Payment)
+              </span>
+            </div>
+            <span className="font-mono text-[10px] px-2.5 py-0.5 rounded-full bg-[#FF007F]/15 text-[#FF4DA6] border border-[#FF007F]/35">
+              UTR ADMIN VERIFIED
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            {(
+              [
+                { id: 'none', title: 'Pay After Quote', sub: 'Submit brief first' },
+                { id: 'partial', title: 'Partial Advance', sub: 'Pay 50% or custom now' },
+                { id: 'full', title: 'Full Payment', sub: 'Pay 100% upfront' },
+              ] as const
+            ).map((opt) => {
+              const selected = (formData.paymentMode || 'none') === opt.id;
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => selectPaymentMode(opt.id)}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    selected
+                      ? 'bg-[#00F0FF]/15 border-[#00F0FF] text-[#F4F6FF] shadow-[0_0_16px_rgba(0,240,255,0.2)]'
+                      : 'bg-[#0D0E1A] border-white/[0.08] text-[#8A94B8] hover:border-[#00F0FF]/40'
+                  }`}
+                >
+                  <div className="text-xs font-bold">{opt.title}</div>
+                  <div className="font-mono text-[10px] opacity-80 mt-0.5">{opt.sub}</div>
+                </button>
+              );
+            })}
+          </div>
+
+          {(formData.paymentMode === 'partial' || formData.paymentMode === 'full') && (
+            <div className="pt-3 border-t border-white/[0.08] grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+              <div className="md:col-span-5 flex flex-col items-center">
+                <div className="bg-[#0A0D15] p-2 rounded-2xl shadow-[0_0_25px_rgba(0,240,255,0.2)] border-2 border-[#00F0FF]/60 w-52 flex items-center justify-center overflow-hidden">
+                  <Image
+                    src="/payment-qr.jpg"
+                    alt="Sayan Sahu PhonePe UPI Payment QR Code"
+                    width={220}
+                    height={280}
+                    className="w-full h-auto object-contain rounded-xl"
+                  />
+                </div>
+                <span className="font-mono text-[10px] text-[#00F0FF] uppercase tracking-wider mt-2 text-center">
+                  Scan via PhonePe / GPay / Paytm / Any UPI
+                </span>
+              </div>
+
+              <div className="md:col-span-7 space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Input
+                    id="totalProjectAmount"
+                    name="totalProjectAmount"
+                    type="number"
+                    min="500"
+                    label="Agreed / Total Budget (₹)"
+                    value={String(formData.totalProjectAmount ?? 500)}
+                    onChange={handleChange}
+                  />
+                  <Input
+                    id="paidAmount"
+                    name="paidAmount"
+                    type="number"
+                    min="100"
+                    label={
+                      formData.paymentMode === 'full'
+                        ? 'Full Amount Paying Now (₹)'
+                        : 'Partial Amount Paying Now (₹)'
+                    }
+                    required
+                    readOnly={formData.paymentMode === 'full'}
+                    value={String(formData.paidAmount ?? 0)}
+                    onChange={handleChange}
+                    error={errors.paidAmount}
+                  />
+                </div>
+
+                <div className="p-2.5 rounded-xl bg-[#0D0E1A] border border-white/[0.08] flex items-center justify-between text-xs font-mono">
+                  <span className="text-[#8A94B8]">Remaining Balance:</span>
+                  <span className="text-[#FF007F] font-bold">
+                    ₹
+                    {Math.max(
+                      0,
+                      Number(formData.totalProjectAmount || 0) -
+                        Number(formData.paidAmount || 0)
+                    )}
+                  </span>
+                </div>
+
+                <Input
+                  id="utrReference"
+                  name="utrReference"
+                  label="UPI Transaction ID / UTR Reference"
+                  required
+                  placeholder="e.g. 432198765432"
+                  value={formData.utrReference || ''}
+                  onChange={handleChange}
+                  error={errors.utrReference}
+                />
+
+                <label className="flex items-start gap-2.5 cursor-pointer select-none pt-1">
+                  <input
+                    id="paymentConfirmed"
+                    name="paymentConfirmed"
+                    type="checkbox"
+                    checked={Boolean(formData.paymentConfirmed)}
+                    onChange={handleChange}
+                    className="mt-0.5 h-4 w-4 rounded border-[#00F0FF]/40 bg-[#0D0E1A] text-[#00F0FF]"
+                  />
+                  <span className="text-xs text-[#D5DCF5] leading-relaxed flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#00F0FF] flex-shrink-0" />
+                    <span>
+                      I confirm I have completed the ₹{formData.paidAmount || 0} UPI payment using the QR code above.
+                    </span>
+                  </span>
+                </label>
+                {errors.paymentConfirmed && (
+                  <p className="text-xs text-red-400 font-medium">{errors.paymentConfirmed}</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       <Textarea
         id="projectDescription"

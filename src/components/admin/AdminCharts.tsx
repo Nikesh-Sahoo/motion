@@ -1,52 +1,63 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { AdminDashboardSummary, TaskStatus } from '@/types/admin';
+import { ArrowRight, DollarSign, FileText, CreditCard, TrendingUp } from 'lucide-react';
+import type { AdminDashboardSummary, AdminTask, TaskStatus } from '@/types/admin';
 import { formatCurrencyINR } from '@/lib/admin/report';
 
 interface AdminChartsProps {
   summary: AdminDashboardSummary;
+  tasks: AdminTask[];
+  onViewTasks: () => void;
 }
 
-const STATUS_COLORS: Record<TaskStatus, { bar: string; text: string }> = {
-  pending: { bar: '#F59E0B', text: 'text-amber-300' },
-  in_progress: { bar: '#19C3B8', text: 'text-[#19C3B8]' },
-  review: { bar: '#818CF8', text: 'text-indigo-300' },
-  completed: { bar: '#10B981', text: 'text-emerald-400' },
-  cancelled: { bar: '#6B7280', text: 'text-zinc-400' },
+const DONUT_PALETTE = ['#10B981', '#F97316', '#3B82F6', '#A855F7', '#00F0FF', '#EC4899'];
+
+const STATUS_PILL: Record<TaskStatus, { label: string; cls: string; bar: string }> = {
+  completed: {
+    label: 'Completed',
+    cls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/35',
+    bar: 'bg-emerald-400',
+  },
+  review: {
+    label: 'In Review',
+    cls: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/35',
+    bar: 'bg-indigo-400',
+  },
+  in_progress: {
+    label: 'In Progress',
+    cls: 'bg-[#00F0FF]/15 text-[#00F0FF] border-[#00F0FF]/35',
+    bar: 'bg-[#00F0FF]',
+  },
+  pending: {
+    label: 'Pending',
+    cls: 'bg-amber-500/15 text-amber-300 border-amber-500/35',
+    bar: 'bg-amber-400',
+  },
+  cancelled: {
+    label: 'Cancelled',
+    cls: 'bg-zinc-500/15 text-zinc-400 border-zinc-500/35',
+    bar: 'bg-zinc-500',
+  },
 };
 
-export function AdminCharts({ summary }: AdminChartsProps) {
+export function AdminCharts({ summary, tasks, onViewTasks }: AdminChartsProps) {
   const [hoveredMonthIdx, setHoveredMonthIdx] = useState<number | null>(null);
-  const [hoveredServiceIdx, setHoveredServiceIdx] = useState<number | null>(null);
+  const [trendRange, setTrendRange] = useState<'monthly' | 'all'>('monthly');
 
-  const monthly = summary.monthlySeries;
+  const monthly = trendRange === 'monthly' ? summary.monthlySeries.slice(-6) : summary.monthlySeries;
   const maxMonthlyValue = Math.max(
     1,
     ...monthly.map((m) => Math.max(m.totalBilled, m.collected, m.toReceive))
   );
 
-  const services = summary.serviceBreakdown;
-  const maxServiceValue = Math.max(
-    1,
-    ...services.map((s) => Math.max(s.collected, s.toReceive, s.totalBilled))
-  );
-
-  // Donut calculations
-  const donutRadius = 62;
-  const donutCircumference = 2 * Math.PI * donutRadius;
-  const totalNonZero = summary.totalCollected + summary.totalToReceive;
-  const collectedShare = totalNonZero > 0 ? summary.totalCollected / totalNonZero : 0;
-  const collectedStroke = collectedShare * donutCircumference;
-  const receivableStroke = Math.max(0, donutCircumference - collectedStroke);
-
   // Trend chart SVG geometry
   const trendW = 540;
   const trendH = 210;
-  const padL = 48;
-  const padR = 18;
-  const padT = 18;
-  const padB = 34;
+  const padL = 46;
+  const padR = 16;
+  const padT = 16;
+  const padB = 30;
   const plotW = trendW - padL - padR;
   const plotH = trendH - padT - padB;
 
@@ -60,393 +71,534 @@ export function AdminCharts({ summary }: AdminChartsProps) {
   };
 
   const buildPolyline = (values: number[]) =>
-    values.map((v, idx) => {
-      const pt = getPoint(idx, v);
-      return `${pt.x.toFixed(1)},${pt.y.toFixed(1)}`;
-    }).join(' ');
+    values
+      .map((v, idx) => {
+        const pt = getPoint(idx, v);
+        return `${pt.x.toFixed(1)},${pt.y.toFixed(1)}`;
+      })
+      .join(' ');
 
   const buildAreaPath = (values: number[]) => {
     if (values.length === 0) return '';
     const pts = values.map((v, idx) => getPoint(idx, v));
-    const line = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+    const line = pts
+      .map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`)
+      .join(' ');
     const baseY = (padT + plotH).toFixed(1);
     return `${line} L${pts[pts.length - 1].x.toFixed(1)},${baseY} L${pts[0].x.toFixed(1)},${baseY} Z`;
   };
 
-  const maxStatusCount = Math.max(1, ...summary.statusBreakdown.map((s) => s.count));
+  // Multi-segment donut by Service Category
+  const topServices = summary.serviceBreakdown.slice(0, 5);
+  const serviceTotal = Math.max(
+    1,
+    topServices.reduce((sum, s) => sum + s.totalBilled, 0)
+  );
+  const donutRadius = 50;
+  const donutCircumference = 2 * Math.PI * donutRadius;
+  let runningOffset = 0;
+  const donutSegments = topServices.map((srv, idx) => {
+    const pct = srv.totalBilled / serviceTotal;
+    const len = pct * donutCircumference;
+    const seg = {
+      ...srv,
+      color: DONUT_PALETTE[idx % DONUT_PALETTE.length],
+      dashArray: `${len} ${donutCircumference}`,
+      dashOffset: -runningOffset,
+    };
+    runningOffset += len;
+    return seg;
+  });
+
+  // Upcoming / pending receivables list
+  const upcomingReceivables = tasks
+    .filter((t) => t.amountToReceive > 0 && t.status !== 'cancelled')
+    .slice(0, 4);
+
+  // Recent tasks for Project/Task Status table
+  const recentTasks = tasks.slice(0, 5);
+
+  // Cash flow columns (mirroring stacked incoming/outgoing style in reference dashboard)
+  const cashFlowBars = (monthly.length > 0 ? monthly : [{ label: 'Now', collected: summary.totalCollected, toReceive: summary.totalToReceive }]).slice(-6);
+  const cashFlowMax = Math.max(
+    1,
+    ...cashFlowBars.map((b) => Math.max(b.collected, b.toReceive))
+  );
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      {/* 1. Monthly Revenue & Collection Trend Area Chart */}
-      <div className="lg:col-span-7 rounded-2xl bg-[#14141B]/95 border border-white/[0.08] p-5 sm:p-6 shadow-[0_12px_32px_rgba(0,0,0,0.45)]">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-          <div>
-            <div className="font-mono text-[10px] uppercase tracking-widest text-[#19C3B8]">
-              CASHFLOW ANALYTICS
-            </div>
-            <h3 className="font-display text-xl sm:text-2xl text-[#F3EFE7] uppercase">
-              Billed vs. Collected vs. Receivable Trend
+    <div className="space-y-5">
+      {/* ROW 2: Revenue Trend (6) + Cash Flow (3) + Upcoming Payments (3) */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        {/* Revenue & Collections Chart */}
+        <div className="xl:col-span-6 rounded-2xl bg-[#0E111B] border border-white/[0.08] p-5 shadow-[0_14px_34px_rgba(0,0,0,0.45)] flex flex-col justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <h3 className="text-base font-semibold text-[#F4F6FF]">
+              Collections &amp; Receivables
             </h3>
+            <div className="inline-flex items-center rounded-lg bg-[#080A12] border border-white/[0.08] p-0.5 text-xs">
+              <button
+                type="button"
+                onClick={() => setTrendRange('monthly')}
+                className={`px-2.5 py-1 rounded-md transition-colors ${
+                  trendRange === 'monthly'
+                    ? 'bg-emerald-500/20 text-emerald-300 font-medium'
+                    : 'text-[#8A94B8] hover:text-[#F4F6FF]'
+                }`}
+              >
+                Monthly
+              </button>
+              <button
+                type="button"
+                onClick={() => setTrendRange('all')}
+                className={`px-2.5 py-1 rounded-md transition-colors ${
+                  trendRange === 'all'
+                    ? 'bg-emerald-500/20 text-emerald-300 font-medium'
+                    : 'text-[#8A94B8] hover:text-[#F4F6FF]'
+                }`}
+              >
+                All Months
+              </button>
+            </div>
           </div>
-          <div className="flex items-center gap-4 text-[11px] font-mono">
-            <span className="flex items-center gap-1.5 text-[#19C3B8]">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#19C3B8]" />
-              Collected
-            </span>
-            <span className="flex items-center gap-1.5 text-[#FF9933]">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#FF9933]" />
-              To Receive
-            </span>
-          </div>
-        </div>
 
-        {monthly.length === 0 ? (
-          <div className="h-[210px] flex items-center justify-center text-xs font-mono text-[#97959F] border border-dashed border-white/[0.08] rounded-xl">
-            Add tasks with billing amounts to see monthly revenue trends.
-          </div>
-        ) : (
-          <div className="relative">
-            <svg viewBox={`0 0 ${trendW} ${trendH}`} className="w-full h-auto overflow-visible">
-              <defs>
-                <linearGradient id="collectedGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#19C3B8" stopOpacity="0.35" />
-                  <stop offset="100%" stopColor="#19C3B8" stopOpacity="0" />
-                </linearGradient>
-                <linearGradient id="receivableGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#FF9933" stopOpacity="0.28" />
-                  <stop offset="100%" stopColor="#FF9933" stopOpacity="0" />
-                </linearGradient>
-              </defs>
+          {monthly.length === 0 ? (
+            <div className="h-[210px] flex items-center justify-center text-xs font-mono text-[#8A94B8] border border-dashed border-white/[0.08] rounded-xl">
+              Add tasks with billing amounts to visualize revenue &amp; collection trends.
+            </div>
+          ) : (
+            <div className="relative">
+              <svg viewBox={`0 0 ${trendW} ${trendH}`} className="w-full h-auto overflow-visible">
+                <defs>
+                  <linearGradient id="proCollectedGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#10B981" stopOpacity="0.32" />
+                    <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="proReceivableGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#F59E0B" stopOpacity="0.22" />
+                    <stop offset="100%" stopColor="#F59E0B" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
 
-              {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
-                const y = padT + plotH - ratio * plotH;
-                const val = Math.round(maxMonthlyValue * ratio);
-                return (
-                  <g key={ratio}>
-                    <line
-                      x1={padL}
-                      y1={y}
-                      x2={trendW - padR}
-                      y2={y}
-                      stroke="rgba(243,239,231,0.07)"
-                      strokeDasharray="3 3"
-                    />
-                    <text
-                      x={padL - 8}
-                      y={y + 3}
-                      textAnchor="end"
-                      fill="#97959F"
-                      fontSize="9"
-                      fontFamily="monospace"
-                    >
-                      {val >= 1000 ? `${Math.round(val / 1000)}k` : val}
-                    </text>
-                  </g>
-                );
-              })}
-
-              <path
-                d={buildAreaPath(monthly.map((m) => m.collected))}
-                fill="url(#collectedGrad)"
-              />
-              <path
-                d={buildAreaPath(monthly.map((m) => m.toReceive))}
-                fill="url(#receivableGrad)"
-              />
-
-              {monthly.length > 1 && (
-                <>
-                  <polyline
-                    fill="none"
-                    stroke="#19C3B8"
-                    strokeWidth="2.5"
-                    strokeLinejoin="round"
-                    strokeLinecap="round"
-                    points={buildPolyline(monthly.map((m) => m.collected))}
-                  />
-                  <polyline
-                    fill="none"
-                    stroke="#FF9933"
-                    strokeWidth="2.5"
-                    strokeLinejoin="round"
-                    strokeLinecap="round"
-                    points={buildPolyline(monthly.map((m) => m.toReceive))}
-                  />
-                </>
-              )}
-
-              {monthly.map((m, idx) => {
-                const colPt = getPoint(idx, m.collected);
-                const recPt = getPoint(idx, m.toReceive);
-                const active = hoveredMonthIdx === idx;
-                return (
-                  <g
-                    key={m.month}
-                    onMouseEnter={() => setHoveredMonthIdx(idx)}
-                    onMouseLeave={() => setHoveredMonthIdx(null)}
-                    className="cursor-pointer"
-                  >
-                    <rect
-                      x={colPt.x - 18}
-                      y={padT}
-                      width={36}
-                      height={plotH}
-                      fill="transparent"
-                    />
-                    {active && (
+                {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
+                  const y = padT + plotH - ratio * plotH;
+                  const val = Math.round(maxMonthlyValue * ratio);
+                  return (
+                    <g key={ratio}>
                       <line
-                        x1={colPt.x}
-                        y1={padT}
-                        x2={colPt.x}
-                        y2={padT + plotH}
-                        stroke="rgba(243,239,231,0.22)"
-                        strokeWidth="1"
+                        x1={padL}
+                        y1={y}
+                        x2={trendW - padR}
+                        y2={y}
+                        stroke="rgba(255,255,255,0.06)"
+                        strokeDasharray="3 3"
                       />
-                    )}
-                    <circle
-                      cx={colPt.x}
-                      cy={colPt.y}
-                      r={active ? 5.5 : 3.8}
-                      fill="#19C3B8"
-                      stroke="#0B0B0D"
-                      strokeWidth="1.5"
+                      <text
+                        x={padL - 8}
+                        y={y + 3}
+                        textAnchor="end"
+                        fill="#64748B"
+                        fontSize="10"
+                        fontFamily="monospace"
+                      >
+                        {val >= 1000 ? `₹${Math.round(val / 1000)}k` : `₹${val}`}
+                      </text>
+                    </g>
+                  );
+                })}
+
+                <path d={buildAreaPath(monthly.map((m) => m.collected))} fill="url(#proCollectedGrad)" />
+                <path d={buildAreaPath(monthly.map((m) => m.toReceive))} fill="url(#proReceivableGrad)" />
+
+                {monthly.length > 1 && (
+                  <>
+                    <polyline
+                      fill="none"
+                      stroke="#10B981"
+                      strokeWidth="2.4"
+                      strokeLinejoin="round"
+                      strokeLinecap="round"
+                      points={buildPolyline(monthly.map((m) => m.collected))}
                     />
-                    <circle
-                      cx={recPt.x}
-                      cy={recPt.y}
-                      r={active ? 5.5 : 3.8}
-                      fill="#FF9933"
-                      stroke="#0B0B0D"
-                      strokeWidth="1.5"
+                    <polyline
+                      fill="none"
+                      stroke="#F59E0B"
+                      strokeWidth="2.4"
+                      strokeLinejoin="round"
+                      strokeLinecap="round"
+                      points={buildPolyline(monthly.map((m) => m.toReceive))}
                     />
-                    <text
-                      x={colPt.x}
-                      y={trendH - 10}
-                      textAnchor="middle"
-                      fill={active ? '#F3EFE7' : '#97959F'}
-                      fontSize="10"
-                      fontFamily="monospace"
+                  </>
+                )}
+
+                {monthly.map((m, idx) => {
+                  const colPt = getPoint(idx, m.collected);
+                  const recPt = getPoint(idx, m.toReceive);
+                  const active = hoveredMonthIdx === idx;
+                  return (
+                    <g
+                      key={m.month}
+                      onMouseEnter={() => setHoveredMonthIdx(idx)}
+                      onMouseLeave={() => setHoveredMonthIdx(null)}
+                      className="cursor-pointer"
                     >
-                      {m.label}
-                    </text>
-                  </g>
-                );
-              })}
-            </svg>
+                      <rect x={colPt.x - 18} y={padT} width={36} height={plotH} fill="transparent" />
+                      {active && (
+                        <line
+                          x1={colPt.x}
+                          y1={padT}
+                          x2={colPt.x}
+                          y2={padT + plotH}
+                          stroke="rgba(255,255,255,0.18)"
+                          strokeWidth="1"
+                        />
+                      )}
+                      <circle cx={colPt.x} cy={colPt.y} r={active ? 5.5 : 3.8} fill="#10B981" stroke="#0E111B" strokeWidth="1.5" />
+                      <circle cx={recPt.x} cy={recPt.y} r={active ? 5.5 : 3.8} fill="#F59E0B" stroke="#0E111B" strokeWidth="1.5" />
+                      <text
+                        x={colPt.x}
+                        y={trendH - 8}
+                        textAnchor="middle"
+                        fill={active ? '#F4F6FF' : '#64748B'}
+                        fontSize="10"
+                        fontFamily="monospace"
+                      >
+                        {m.label}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
 
-            {hoveredMonthIdx !== null && monthly[hoveredMonthIdx] && (
-              <div className="mt-2 px-3.5 py-2 rounded-xl bg-[#0B0B0D] border border-white/[0.12] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-                <span className="text-[#F3EFE7] font-semibold">
-                  {monthly[hoveredMonthIdx].label} ({monthly[hoveredMonthIdx].taskCount} tasks)
-                </span>
-                <span className="text-[#19C3B8]">
-                  Collected: {formatCurrencyINR(monthly[hoveredMonthIdx].collected)}
-                </span>
-                <span className="text-[#FF9933]">
-                  To Receive: {formatCurrencyINR(monthly[hoveredMonthIdx].toReceive)}
-                </span>
+              <div className="mt-2 flex flex-wrap items-center justify-between gap-3 text-xs">
+                <div className="flex items-center gap-4">
+                  <span className="flex items-center gap-1.5 text-emerald-300">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                    Collected
+                  </span>
+                  <span className="flex items-center gap-1.5 text-amber-300">
+                    <span className="w-2 h-2 rounded-full bg-amber-400" />
+                    To Receive
+                  </span>
+                </div>
+                {hoveredMonthIdx !== null && monthly[hoveredMonthIdx] && (
+                  <span className="font-mono text-[11px] text-[#D5DCF5]">
+                    {monthly[hoveredMonthIdx].label}:{' '}
+                    <span className="text-emerald-400">
+                      {formatCurrencyINR(monthly[hoveredMonthIdx].collected)}
+                    </span>{' '}
+                    / Pending{' '}
+                    <span className="text-amber-400">
+                      {formatCurrencyINR(monthly[hoveredMonthIdx].toReceive)}
+                    </span>
+                  </span>
+                )}
               </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* 2. Collection Ratio Donut Chart */}
-      <div className="lg:col-span-5 rounded-2xl bg-[#14141B]/95 border border-white/[0.08] p-5 sm:p-6 shadow-[0_12px_32px_rgba(0,0,0,0.45)] flex flex-col justify-between">
-        <div>
-          <div className="font-mono text-[10px] uppercase tracking-widest text-[#FF9933]">
-            PAYMENT RATIO
-          </div>
-          <h3 className="font-display text-xl sm:text-2xl text-[#F3EFE7] uppercase mb-4">
-            Collected vs. Pending Receivables
-          </h3>
+            </div>
+          )}
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-6 my-auto">
-          <div className="relative w-44 h-44 flex-shrink-0">
-            <svg viewBox="0 0 160 160" className="w-full h-full -rotate-90">
-              <circle
-                cx="80"
-                cy="80"
-                r={donutRadius}
-                fill="none"
-                stroke="rgba(255,255,255,0.06)"
-                strokeWidth="18"
-              />
-              {totalNonZero > 0 && (
-                <>
-                  <circle
-                    cx="80"
-                    cy="80"
-                    r={donutRadius}
-                    fill="none"
-                    stroke="#FF9933"
-                    strokeWidth="18"
-                    strokeDasharray={`${receivableStroke} ${donutCircumference}`}
-                    strokeDashoffset={-collectedStroke}
-                    strokeLinecap="butt"
-                  />
-                  <circle
-                    cx="80"
-                    cy="80"
-                    r={donutRadius}
-                    fill="none"
-                    stroke="#19C3B8"
-                    strokeWidth="18"
-                    strokeDasharray={`${collectedStroke} ${donutCircumference}`}
-                    strokeLinecap="round"
-                  />
-                </>
-              )}
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-              <span className="font-display text-3xl text-[#F3EFE7]">
-                {summary.collectionRate}%
-              </span>
-              <span className="font-mono text-[10px] uppercase tracking-wider text-[#97959F]">
-                Collected
-              </span>
-            </div>
+        {/* Cash Flow Card */}
+        <div className="xl:col-span-3 rounded-2xl bg-[#0E111B] border border-white/[0.08] p-5 shadow-[0_14px_34px_rgba(0,0,0,0.45)] flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-base font-semibold text-[#F4F6FF]">Cash Flow</h3>
+            <TrendingUp className="w-4 h-4 text-[#8A94B8]" />
           </div>
 
-          <div className="flex-1 w-full space-y-3">
-            <div className="p-3 rounded-xl bg-[#0B0B0D] border border-white/[0.08]">
-              <div className="flex items-center justify-between text-xs font-mono text-[#97959F] mb-1">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[#19C3B8]" />
-                  Amount Collected
-                </span>
-              </div>
-              <div className="font-display text-xl text-[#19C3B8]">
-                {formatCurrencyINR(summary.totalCollected)}
-              </div>
-            </div>
-
-            <div className="p-3 rounded-xl bg-[#0B0B0D] border border-white/[0.08]">
-              <div className="flex items-center justify-between text-xs font-mono text-[#97959F] mb-1">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[#FF9933]" />
-                  To Be Received
-                </span>
-              </div>
-              <div className="font-display text-xl text-[#FF9933]">
-                {formatCurrencyINR(summary.totalToReceive)}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Revenue by Service Category Grouped Bar Chart */}
-      <div className="lg:col-span-7 rounded-2xl bg-[#14141B]/95 border border-white/[0.08] p-5 sm:p-6 shadow-[0_12px_32px_rgba(0,0,0,0.45)]">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-          <div>
-            <div className="font-mono text-[10px] uppercase tracking-widest text-[#19C3B8]">
-              SERVICE REVENUE MIX
-            </div>
-            <h3 className="font-display text-xl sm:text-2xl text-[#F3EFE7] uppercase">
-              Collected &amp; Receivable by Service
-            </h3>
-          </div>
-        </div>
-
-        {services.length === 0 ? (
-          <div className="h-44 flex items-center justify-center text-xs font-mono text-[#97959F] border border-dashed border-white/[0.08] rounded-xl">
-            No service billing data available yet.
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 items-end h-44 pt-4 border-b border-white/[0.08] pb-2">
-              {services.slice(0, 4).map((srv, idx) => {
-                const colPct = Math.max(4, Math.round((srv.collected / maxServiceValue) * 100));
-                const recPct = Math.max(4, Math.round((srv.toReceive / maxServiceValue) * 100));
-                const active = hoveredServiceIdx === idx;
+          <div className="flex items-center gap-4 my-auto py-3">
+            {/* Bidirectional Cashflow Bars */}
+            <div className="flex items-center gap-1.5 h-32 flex-1 justify-center">
+              {cashFlowBars.map((bar, i) => {
+                const upH = Math.max(10, Math.round((bar.collected / cashFlowMax) * 52));
+                const downH = Math.max(8, Math.round((bar.toReceive / cashFlowMax) * 44));
                 return (
-                  <div
-                    key={srv.serviceType}
-                    onMouseEnter={() => setHoveredServiceIdx(idx)}
-                    onMouseLeave={() => setHoveredServiceIdx(null)}
-                    className={`h-full flex flex-col justify-end items-center gap-2 rounded-xl px-2 py-1 transition-colors ${
-                      active ? 'bg-white/[0.04]' : ''
-                    }`}
-                  >
-                    <div className="w-full flex-1 flex items-end justify-center gap-2">
+                  <div key={`${bar.label}-${i}`} className="flex flex-col items-center gap-0.5">
+                    <div className="h-14 flex items-end">
                       <div
-                        className="w-5 sm:w-6 rounded-t-md bg-gradient-to-t from-[#19C3B8]/70 to-[#19C3B8] transition-all duration-300"
-                        style={{ height: `${srv.collected > 0 ? colPct : 2}%` }}
-                        title={`Collected: ${formatCurrencyINR(srv.collected)}`}
-                      />
-                      <div
-                        className="w-5 sm:w-6 rounded-t-md bg-gradient-to-t from-[#FF9933]/70 to-[#FF9933] transition-all duration-300"
-                        style={{ height: `${srv.toReceive > 0 ? recPct : 2}%` }}
-                        title={`To Receive: ${formatCurrencyINR(srv.toReceive)}`}
+                        className="w-2.5 rounded-t bg-gradient-to-t from-emerald-500/75 to-[#00F0FF]"
+                        style={{ height: `${bar.collected > 0 ? upH : 4}px` }}
+                        title={`${bar.label} Collected: ${formatCurrencyINR(bar.collected)}`}
                       />
                     </div>
-                    <span className="font-mono text-[10px] text-[#DDD8CE] text-center truncate w-full">
-                      {srv.shortLabel}
-                    </span>
+                    <div className="h-12 flex items-start">
+                      <div
+                        className="w-2.5 rounded-b bg-gradient-to-b from-amber-500/80 to-orange-600"
+                        style={{ height: `${bar.toReceive > 0 ? downH : 4}px` }}
+                        title={`${bar.label} Pending: ${formatCurrencyINR(bar.toReceive)}`}
+                      />
+                    </div>
                   </div>
                 );
               })}
             </div>
 
-            {hoveredServiceIdx !== null && services[hoveredServiceIdx] ? (
-              <div className="px-3.5 py-2 rounded-xl bg-[#0B0B0D] border border-white/[0.12] flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
-                <span className="text-[#F3EFE7] font-semibold">
-                  {services[hoveredServiceIdx].serviceType} ({services[hoveredServiceIdx].taskCount} tasks)
-                </span>
-                <span className="text-[#19C3B8]">
-                  Collected: {formatCurrencyINR(services[hoveredServiceIdx].collected)}
-                </span>
-                <span className="text-[#FF9933]">
-                  To Receive: {formatCurrencyINR(services[hoveredServiceIdx].toReceive)}
-                </span>
+            <div className="space-y-3 min-w-[110px]">
+              <div>
+                <div className="text-lg font-bold text-[#F4F6FF]">
+                  {formatCurrencyINR(summary.totalCollected)}
+                </div>
+                <div className="text-[11px] text-emerald-400 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  Collected
+                </div>
               </div>
-            ) : (
-              <div className="text-[11px] font-mono text-[#97959F]">
-                Hover any service bar group to inspect collected vs. pending receivable amounts.
-              </div>
-            )}
-          </div>
-        )}
-      </div>
 
-      {/* 4. Tasks by Status Pipeline Breakdown */}
-      <div className="lg:col-span-5 rounded-2xl bg-[#14141B]/95 border border-white/[0.08] p-5 sm:p-6 shadow-[0_12px_32px_rgba(0,0,0,0.45)]">
-        <div className="mb-5">
-          <div className="font-mono text-[10px] uppercase tracking-widest text-[#FF9933]">
-            WORKLOAD PIPELINE
+              <div>
+                <div className="text-lg font-bold text-amber-400">
+                  {formatCurrencyINR(summary.totalToReceive)}
+                </div>
+                <div className="text-[11px] text-amber-300 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                  To Receive
+                </div>
+              </div>
+            </div>
           </div>
-          <h3 className="font-display text-xl sm:text-2xl text-[#F3EFE7] uppercase">
-            Tasks by Production Status
-          </h3>
+
+          <button
+            type="button"
+            onClick={onViewTasks}
+            className="pt-3 border-t border-white/[0.06] text-xs font-medium text-[#00F0FF] hover:text-[#F4F6FF] inline-flex items-center justify-center gap-1.5 transition-colors"
+          >
+            <span>View Details</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
         </div>
 
-        <div className="space-y-3.5">
-          {summary.statusBreakdown.map((item) => {
-            const widthPct =
-              item.count > 0 ? Math.max(8, Math.round((item.count / maxStatusCount) * 100)) : 0;
-            const palette = STATUS_COLORS[item.status];
-            return (
-              <div key={item.status} className="space-y-1.5">
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className={`font-semibold ${palette.text}`}>{item.label}</span>
-                  <span className="text-[#DDD8CE]">
-                    {item.count} {item.count === 1 ? 'task' : 'tasks'} · {formatCurrencyINR(item.amount)}
-                  </span>
-                </div>
-                <div className="h-2.5 rounded-full bg-white/[0.06] overflow-hidden">
-                  <div
-                    className="h-full rounded-full transition-all duration-500"
-                    style={{
-                      width: `${widthPct}%`,
-                      backgroundColor: palette.bar,
-                    }}
-                  />
-                </div>
+        {/* Upcoming Payments Card */}
+        <div className="xl:col-span-3 rounded-2xl bg-[#0E111B] border border-white/[0.08] p-5 shadow-[0_14px_34px_rgba(0,0,0,0.45)] flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-semibold text-[#F4F6FF]">Upcoming Payments</h3>
+            <button
+              type="button"
+              onClick={onViewTasks}
+              className="text-xs font-medium text-[#00F0FF] hover:underline"
+            >
+              View All
+            </button>
+          </div>
+
+          <div className="space-y-3 my-auto">
+            {upcomingReceivables.length === 0 ? (
+              <div className="py-8 text-center text-xs text-[#8A94B8] border border-dashed border-white/[0.08] rounded-xl">
+                All billed tasks are settled!
               </div>
-            );
-          })}
+            ) : (
+              upcomingReceivables.map((t, idx) => {
+                const iconPalette =
+                  idx % 3 === 0
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                    : idx % 3 === 1
+                    ? 'bg-rose-500/20 text-rose-300 border-rose-500/30'
+                    : 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30';
+                const IconComp = idx % 3 === 0 ? DollarSign : idx % 3 === 1 ? CreditCard : FileText;
+                return (
+                  <div key={t.id} className="flex items-center justify-between gap-2.5">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className={`w-8 h-8 rounded-lg border flex items-center justify-center flex-shrink-0 ${iconPalette}`}>
+                        <IconComp className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs font-medium text-[#F4F6FF] truncate">
+                          {t.clientName}
+                        </div>
+                        <div className="text-[11px] text-[#8A94B8] font-mono">
+                          Due {t.dueDate}
+                        </div>
+                      </div>
+                    </div>
+                    <span className="text-xs font-mono font-semibold text-amber-400 whitespace-nowrap">
+                      {formatCurrencyINR(t.amountToReceive)}
+                    </span>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ROW 3: Revenue by Service Donut (3) + Task Status Table (5) + Editor Performance (4) */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        {/* Service Category Donut */}
+        <div className="xl:col-span-3 rounded-2xl bg-[#0E111B] border border-white/[0.08] p-5 shadow-[0_14px_34px_rgba(0,0,0,0.45)]">
+          <h3 className="text-base font-semibold text-[#F4F6FF] mb-4">
+            Revenue by Service
+          </h3>
+
+          {topServices.length === 0 ? (
+            <div className="h-40 flex items-center justify-center text-xs text-[#8A94B8] border border-dashed border-white/[0.08] rounded-xl">
+              No service billing yet.
+            </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <div className="relative w-28 h-28 flex-shrink-0">
+                <svg viewBox="0 0 130 130" className="w-full h-full -rotate-90">
+                  <circle
+                    cx="65"
+                    cy="65"
+                    r={donutRadius}
+                    fill="none"
+                    stroke="rgba(255,255,255,0.06)"
+                    strokeWidth="16"
+                  />
+                  {donutSegments.map((seg) => (
+                    <circle
+                      key={seg.serviceType}
+                      cx="65"
+                      cy="65"
+                      r={donutRadius}
+                      fill="none"
+                      stroke={seg.color}
+                      strokeWidth="16"
+                      strokeDasharray={seg.dashArray}
+                      strokeDashoffset={seg.dashOffset}
+                    />
+                  ))}
+                </svg>
+              </div>
+
+              <div className="flex-1 min-w-0 space-y-2.5">
+                {donutSegments.slice(0, 4).map((seg) => (
+                  <div key={seg.serviceType} className="min-w-0">
+                    <div className="flex items-center gap-1.5 text-[11px] text-[#8A94B8] truncate">
+                      <span
+                        className="w-2 h-2 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: seg.color }}
+                      />
+                      <span className="truncate">{seg.shortLabel}</span>
+                    </div>
+                    <div className="text-xs font-semibold text-[#F4F6FF] font-mono pl-3.5">
+                      {formatCurrencyINR(seg.totalBilled)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Task Status Table */}
+        <div className="xl:col-span-5 rounded-2xl bg-[#0E111B] border border-white/[0.08] p-5 shadow-[0_14px_34px_rgba(0,0,0,0.45)] overflow-hidden">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-base font-semibold text-[#F4F6FF]">Task Status</h3>
+            <button
+              type="button"
+              onClick={onViewTasks}
+              className="text-xs font-medium text-[#00F0FF] hover:underline"
+            >
+              Manage All
+            </button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="border-b border-white/[0.08] text-[#8A94B8] font-medium">
+                  <th className="py-2 pr-3">Task</th>
+                  <th className="py-2 px-2">Progress</th>
+                  <th className="py-2 px-2 text-right">Budget</th>
+                  <th className="py-2 pl-2 text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.06]">
+                {recentTasks.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="py-8 text-center text-[#8A94B8]">
+                      No tasks registered yet.
+                    </td>
+                  </tr>
+                ) : (
+                  recentTasks.map((t) => {
+                    const st = STATUS_PILL[t.status];
+                    return (
+                      <tr key={t.id}>
+                        <td className="py-2.5 pr-3 max-w-[145px]">
+                          <div className="font-medium text-[#F4F6FF] truncate">{t.title}</div>
+                          <div className="text-[10px] text-[#8A94B8] truncate">{t.assignedTo}</div>
+                        </td>
+                        <td className="py-2.5 px-2 min-w-[95px]">
+                          <div className="flex items-center gap-2">
+                            <div className="flex-1 h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
+                              <div
+                                className={`h-full rounded-full ${st.bar}`}
+                                style={{ width: `${t.progress}%` }}
+                              />
+                            </div>
+                            <span className="font-mono text-[10px] text-[#D5DCF5] w-7 text-right">
+                              {t.progress}%
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-2.5 px-2 text-right font-mono text-[#F4F6FF] whitespace-nowrap">
+                          {formatCurrencyINR(t.totalAmount)}
+                        </td>
+                        <td className="py-2.5 pl-2 text-right whitespace-nowrap">
+                          <span className={`inline-block px-2 py-0.5 rounded-full border text-[10px] font-medium ${st.cls}`}>
+                            {st.label}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Registered Editor Performance */}
+        <div className="xl:col-span-4 rounded-2xl bg-[#0E111B] border border-white/[0.08] p-5 shadow-[0_14px_34px_rgba(0,0,0,0.45)]">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-semibold text-[#F4F6FF]">Editor Performance</h3>
+            <span className="text-[11px] font-mono text-[#8A94B8]">Registered Editors</span>
+          </div>
+
+          <div className="space-y-3.5">
+            {summary.editorPerformance.length === 0 ? (
+              <div className="py-8 text-center text-xs text-[#8A94B8] border border-dashed border-white/[0.08] rounded-xl">
+                Register editors in <strong className="text-[#00F0FF]">Team &amp; Editors</strong> or approve applications to track performance.
+              </div>
+            ) : (
+              summary.editorPerformance.slice(0, 4).map((ed, idx) => {
+                const barColor =
+                  idx % 3 === 0
+                    ? 'bg-emerald-400'
+                    : idx % 3 === 1
+                    ? 'bg-amber-400'
+                    : 'bg-[#00F0FF]';
+                const initials = ed.name
+                  .split(' ')
+                  .map((p) => p[0])
+                  .join('')
+                  .slice(0, 2)
+                  .toUpperCase();
+                return (
+                  <div key={ed.editorId} className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#00F0FF]/30 to-[#FF007F]/30 border border-white/15 flex items-center justify-center text-[11px] font-bold text-[#F4F6FF] flex-shrink-0">
+                      {initials}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between text-xs mb-1">
+                        <span className="font-medium text-[#F4F6FF] truncate">{ed.name}</span>
+                        <span className="font-mono text-[10px] text-[#8A94B8]">
+                          {ed.completedCount}/{ed.assignedCount} done
+                        </span>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
+                        <div
+                          className={`h-full rounded-full ${barColor}`}
+                          style={{ width: `${ed.avgProgress}%` }}
+                        />
+                      </div>
+                    </div>
+                    <span className="font-mono text-xs font-semibold text-[#F4F6FF] w-9 text-right">
+                      {ed.avgProgress}%
+                    </span>
+                  </div>
+                );
+              })
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -5,7 +5,8 @@ import { isJwtConfigured, verifyAdminJwt, type AdminJwtPayload } from '@/lib/aut
 import type { AdminUserPublic, UserType } from '@/types/admin';
 
 export const ADMIN_COOKIE_NAME = 'motionxyne_admin_token';
-export const ADMIN_SESSION_MAX_AGE = 60 * 60 * 24; // 24 hours
+export const EDITOR_COOKIE_NAME = 'motionxyne_editor_token';
+export const SESSION_MAX_AGE = 60 * 60 * 24; // 24 hours
 
 export interface UserDocument {
   _id?: ObjectId;
@@ -35,27 +36,37 @@ export function sanitizeUser(doc: UserDocument & { _id: ObjectId }): AdminUserPu
   };
 }
 
-export function extractTokenFromRequest(request: NextRequest): string | null {
+export function extractTokenFromRequest(
+  request: NextRequest,
+  cookieName: string
+): string | null {
   const authHeader = request.headers.get('authorization');
   if (authHeader && authHeader.toLowerCase().startsWith('bearer ')) {
     const bearer = authHeader.slice(7).trim();
     if (bearer) return bearer;
   }
-  return request.cookies.get(ADMIN_COOKIE_NAME)?.value || null;
+  return request.cookies.get(cookieName)?.value || null;
 }
 
-export function setAdminSessionCookie(response: NextResponse, token: string): void {
-  response.cookies.set(ADMIN_COOKIE_NAME, token, {
+export function setSessionCookie(
+  response: NextResponse,
+  cookieName: string,
+  token: string
+): void {
+  response.cookies.set(cookieName, token, {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
     path: '/',
-    maxAge: ADMIN_SESSION_MAX_AGE,
+    maxAge: SESSION_MAX_AGE,
   });
 }
 
-export function clearAdminSessionCookie(response: NextResponse): void {
-  response.cookies.set(ADMIN_COOKIE_NAME, '', {
+export function clearSessionCookie(
+  response: NextResponse,
+  cookieName: string
+): void {
+  response.cookies.set(cookieName, '', {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
@@ -64,14 +75,34 @@ export function clearAdminSessionCookie(response: NextResponse): void {
   });
 }
 
-export type AdminAuthResult =
+export function setAdminSessionCookie(response: NextResponse, token: string): void {
+  setSessionCookie(response, ADMIN_COOKIE_NAME, token);
+}
+
+export function clearAdminSessionCookie(response: NextResponse): void {
+  clearSessionCookie(response, ADMIN_COOKIE_NAME);
+}
+
+export function setEditorSessionCookie(response: NextResponse, token: string): void {
+  setSessionCookie(response, EDITOR_COOKIE_NAME, token);
+}
+
+export function clearEditorSessionCookie(response: NextResponse): void {
+  clearSessionCookie(response, EDITOR_COOKIE_NAME);
+}
+
+export type RoleAuthResult =
   | { ok: true; user: AdminUserPublic; payload: AdminJwtPayload }
   | { ok: false; response: NextResponse };
 
 /**
- * Verifies the incoming request has a valid JWT AND belongs to an active user with type === 'admin'.
+ * Verifies the incoming request has a valid HS256 JWT and belongs to an active MongoDB user with the required type.
  */
-export async function requireAdmin(request: NextRequest): Promise<AdminAuthResult> {
+export async function requireRole(
+  request: NextRequest,
+  requiredType: UserType,
+  cookieName: string
+): Promise<RoleAuthResult> {
   if (!isMongoConfigured()) {
     return {
       ok: false,
@@ -92,7 +123,7 @@ export async function requireAdmin(request: NextRequest): Promise<AdminAuthResul
     };
   }
 
-  const token = extractTokenFromRequest(request);
+  const token = extractTokenFromRequest(request, cookieName);
   if (!token) {
     return {
       ok: false,
@@ -114,13 +145,13 @@ export async function requireAdmin(request: NextRequest): Promise<AdminAuthResul
     };
   }
 
-  if (payload.type !== 'admin') {
+  if (payload.type !== requiredType) {
     return {
       ok: false,
       response: NextResponse.json(
         {
           success: false,
-          error: "Access denied: only users with type 'admin' are allowed.",
+          error: `Access denied: only users with type '${requiredType}' are allowed.`,
         },
         { status: 403 }
       ),
@@ -151,13 +182,13 @@ export async function requireAdmin(request: NextRequest): Promise<AdminAuthResul
     };
   }
 
-  if (userDoc.type !== 'admin' || userDoc.isActive === false) {
+  if (userDoc.type !== requiredType || userDoc.isActive === false) {
     return {
       ok: false,
       response: NextResponse.json(
         {
           success: false,
-          error: "Access denied: only active users with type 'admin' are allowed.",
+          error: `Access denied: only active registered users with type '${requiredType}' are allowed.`,
         },
         { status: 403 }
       ),
@@ -169,4 +200,12 @@ export async function requireAdmin(request: NextRequest): Promise<AdminAuthResul
     user: sanitizeUser(userDoc as UserDocument & { _id: ObjectId }),
     payload,
   };
+}
+
+export async function requireAdmin(request: NextRequest): Promise<RoleAuthResult> {
+  return requireRole(request, 'admin', ADMIN_COOKIE_NAME);
+}
+
+export async function requireEditor(request: NextRequest): Promise<RoleAuthResult> {
+  return requireRole(request, 'editor', EDITOR_COOKIE_NAME);
 }

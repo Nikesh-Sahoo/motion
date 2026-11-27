@@ -6,6 +6,7 @@ import {
   buildDashboardSummary,
   serializeApplication,
   serializeInquiry,
+  serializePaymentVerification,
   serializeTask,
   type TaskDocument,
 } from '@/lib/admin/analytics';
@@ -23,7 +24,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const payload: AdminOverviewPayload = await withDatabase(async (db) => {
-      const [taskDocs, inquiryDocs, appDocs, userDocs] = await Promise.all([
+      const [taskDocs, inquiryDocs, appDocs, userDocs, verificationDocs] = await Promise.all([
         db.collection<TaskDocument>('tasks').find({}).sort({ createdAt: -1 }).toArray(),
         db.collection('inquiries').find({}).sort({ createdAt: -1 }).limit(100).toArray(),
         db
@@ -33,6 +34,12 @@ export async function GET(request: NextRequest) {
           .limit(100)
           .toArray(),
         db.collection<UserDocument>('users').find({}).sort({ createdAt: -1 }).toArray(),
+        db
+          .collection('payment_verifications')
+          .find({})
+          .sort({ verifiedAt: -1 })
+          .limit(60)
+          .toArray(),
       ]);
 
       const tasks = taskDocs.map((doc) =>
@@ -47,14 +54,23 @@ export async function GET(request: NextRequest) {
       const users = userDocs.map((doc) =>
         sanitizeUser(doc as UserDocument & { _id: ObjectId })
       );
+      const paymentVerifications = verificationDocs.map((doc) =>
+        serializePaymentVerification(doc as Record<string, unknown> & { _id: ObjectId })
+      );
 
-      const summary = buildDashboardSummary(tasks, inquiries.length, applications.length);
+      const summary = buildDashboardSummary(
+        tasks,
+        inquiries.length,
+        applications.length,
+        users
+      );
 
       return {
         tasks,
         inquiries,
         applications,
         users,
+        paymentVerifications,
         summary,
       };
     });

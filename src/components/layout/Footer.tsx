@@ -96,6 +96,7 @@ export function Footer() {
 
           <div className="flex gap-4 font-mono text-[11px]">
             <Link href="/admin" className="hover:text-[#00F0FF]">Admin Portal</Link>
+            <Link href="/editor" className="hover:text-[#FF007F]">Editor Portal</Link>
             <Link href="/privacy-policy" className="hover:text-[#F4F6FF]">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-[#F4F6FF]">Terms</Link>
           </div>

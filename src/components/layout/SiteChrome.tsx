@@ -7,9 +7,10 @@ import { Footer } from '@/components/layout/Footer';
 
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAdminRoute = pathname?.startsWith('/admin');
+  const isPortalRoute =
+    pathname?.startsWith('/admin') || pathname?.startsWith('/editor');
 
-  if (isAdminRoute) {
+  if (isPortalRoute) {
     return <main className="flex-1 min-h-screen">{children}</main>;
   }
 
