@@ -222,11 +222,11 @@ export const portfolioProjects: PortfolioItem[] = [
   },
 ];
 
-// 6 Client Testimonials from editshphere.in
+// 6 Client Testimonials
 export const clientTestimonials: ClientReview[] = [
   {
     id: 'review-1',
-    name: 'Sarah Mitchell',
+    name: 'Ananya Sharma',
     role: 'Café Owner',
     quote:
       "We weren't just looking for someone to edit videos—we needed content that actually got people interested in our brand. The reels Sayan delivered felt professional, engaging, and perfectly matched our vibe. We noticed higher engagement almost immediately and the whole process was incredibly smooth.",
@@ -234,7 +234,7 @@ export const clientTestimonials: ClientReview[] = [
   },
   {
     id: 'review-2',
-    name: 'Daniel Carter',
+    name: 'Rohan Verma',
     role: 'Travel Content Creator',
     quote:
       'I sent over hours of footage with very little direction and got back a film that felt cinematic, emotional, and polished. The pacing, music, and storytelling turned simple clips into something people genuinely wanted to watch.',
@@ -242,7 +242,7 @@ export const clientTestimonials: ClientReview[] = [
   },
   {
     id: 'review-3',
-    name: 'James Walker',
+    name: 'Arjun Mehta',
     role: 'Founder & Creator',
     quote:
       "What stood out most wasn't the editing—it was the understanding of audience retention. Every cut felt intentional. The final video kept viewers engaged and represented my brand better than I imagined.",
@@ -250,7 +250,7 @@ export const clientTestimonials: ClientReview[] = [
   },
   {
     id: 'review-4',
-    name: 'Alex Thompson',
+    name: 'Aditya Kulkarni',
     role: 'Marketing Lead',
     quote:
       "Reliable, fast, and incredibly easy to work with. We trusted Sayan with multiple client projects, and he consistently delivered high-quality edits that matched each brand's style while meeting tight deadlines.",
@@ -258,7 +258,7 @@ export const clientTestimonials: ClientReview[] = [
   },
   {
     id: 'review-5',
-    name: 'Rachel Morgan',
+    name: 'Priya Deshmukh',
     role: 'Brand Manager',
     quote:
       'The difference between average content and great content is attention to detail. From storytelling to sound design, every part of the edit felt premium. The final result looked like something from a much larger production team.',
@@ -266,7 +266,7 @@ export const clientTestimonials: ClientReview[] = [
   },
   {
     id: 'review-6',
-    name: 'Michael Reed',
+    name: 'Kabir Malhotra',
     role: 'Creative Director',
     quote:
       'Great footage gets views. Great storytelling gets results. Sayan understands the difference.',
